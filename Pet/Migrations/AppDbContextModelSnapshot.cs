@@ -62,6 +62,10 @@ namespace Pet.Migrations
                     b.Property<bool>("IsWorking")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.ToTable("Halls");
@@ -114,6 +118,9 @@ namespace Pet.Migrations
 
                     b.Property<int>("MovieId")
                         .HasColumnType("integer");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
 
                     b.Property<TimeSpan>("Time")
                         .HasColumnType("interval");

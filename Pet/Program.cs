@@ -1,6 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Pet.Models;
+using Pet.Repositories;
 
 namespace Pet
 {
@@ -9,6 +10,8 @@ namespace Pet
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddScoped<HallRepository>();
 
 
             builder.Services.AddControllers();

@@ -49,7 +49,7 @@ namespace Pet.Repositories
         }
 
         public async Task Add(string title, string author, float rating,
-            string description, TimeSpan time, List<SessionEntity> sessionEntities )
+            string description, TimeSpan time )
         {
             var movie = new MovieEntity()
             {
@@ -57,8 +57,7 @@ namespace Pet.Repositories
                 Title = title,
                 Rating = rating,
                 Description = description,
-                Time = time,
-                Sessions = sessionEntities
+                Time = time
             };
             await _context.AddAsync(movie);
             await _context.SaveChangesAsync();
