@@ -32,7 +32,7 @@ namespace Pet.Repositories
 
             if (!string.IsNullOrWhiteSpace(title))
             {
-                query = query.Where(x => x.Title.Contains(title));
+                query = query.Where(x => x.Title.ToLower().Contains(title));
             }
 
             return await query.ToListAsync();
@@ -40,16 +40,15 @@ namespace Pet.Repositories
 
         public async Task<List<MovieEntity>> GetByPage(int page, int pageSize)
         {
-            var query = _context.Movies.AsNoTracking();
-
-            query.Skip((page - 1) * pageSize)
-                .Take(pageSize);
-
-            return await query.ToListAsync();
+            return await _context.Movies
+                                    .AsNoTracking()
+                                    .Skip((page - 1) * pageSize)
+                                    .Take(pageSize)
+                                    .ToListAsync(); 
         }
 
         public async Task Add(string title, string author, float rating,
-            string description, TimeSpan time )
+            string description, TimeSpan time)
         {
             var movie = new MovieEntity()
             {
@@ -57,8 +56,9 @@ namespace Pet.Repositories
                 Title = title,
                 Rating = rating,
                 Description = description,
-                Time = time
+                Time = time,
             };
+
             await _context.AddAsync(movie);
             await _context.SaveChangesAsync();
         }

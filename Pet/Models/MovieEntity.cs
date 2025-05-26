@@ -1,6 +1,6 @@
 ﻿namespace Pet.Models
 {
-    public class MovieEntity
+    public class MovieEntity 
     {
         public int Id { get; set; }
         public required string Title { get; set; }
