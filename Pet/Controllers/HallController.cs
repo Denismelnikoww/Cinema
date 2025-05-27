@@ -59,7 +59,7 @@ namespace Pet.Controllers
 
             if (hall == null)
             {
-                throw new Exception("Зала с таким айди не существует");
+                throw new BadHttpRequestException("Зала с таким айди не существует");
             }
 
             var dto = new HallDto

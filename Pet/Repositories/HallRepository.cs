@@ -27,7 +27,7 @@ namespace Pet.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<HallEntity>? GetById(int id)
+        public async Task<HallEntity?> GetById(int id)
         {
             return await _context.Halls.FirstOrDefaultAsync(x => x.Id == id);
         }
