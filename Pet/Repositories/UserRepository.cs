@@ -25,8 +25,16 @@ namespace Pet.Repositories
                 .FirstOrDefaultAsync(x => x.Email == email);
         }
 
+        
+
         public async Task Add(string userName, string passwordHash, string email, bool isAdmin)
         {
+            var alreadyExists = await GetByEmail(email);
+
+            if (alreadyExists != null) {
+                throw new BadHttpRequestException("This user is already registered");
+            }
+
             var User = new UserEntity
             {
                 Email = email,

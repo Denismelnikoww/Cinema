@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Pet.Contracts;
+using Pet.Options;
 using Pet.Repositories;
 using Pet.Services;
 
@@ -11,31 +14,29 @@ namespace Pet.Controllers
     {
         private readonly UserRepository _repository;
         private readonly UserService _userService;
+        private readonly IOptions<AuthOptions> _authOptions;
 
 
-        public UserController(UserService userService, UserRepository userRepository)
+        public UserController(UserService userService, UserRepository userRepository,
+            IOptions<AuthOptions> authOptions)
         {
             _repository = userRepository;
             _userService = userService;
+            _authOptions = authOptions;
         }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
         {
-            try
-            {
-                var token = await _userService.Login(loginRequest.Email, loginRequest.Password);
+            var token = await _userService.Login(loginRequest.Email, loginRequest.Password);
 
-                return Ok(token);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("Error: " + ex.Message);
-            }
+            Response.Cookies.Append(_authOptions.Value.CookieName, token);
+
+            return Ok();
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Register([FromBody]RegisterRequest registerRequest)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest registerRequest)
         {
             await _userService.Register(registerRequest.UserName,
                 registerRequest.Password,
@@ -44,21 +45,6 @@ namespace Pet.Controllers
             return Ok("User has been successfully registered");
         }
 
-    }
-
-
-
-    public record RegisterRequest
-    {
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
-    }
-
-    public record LoginRequest
-    {
-        public string Password { get; set; }
-        public string Email { get; set; }
     }
 }
 

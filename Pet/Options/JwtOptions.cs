@@ -1,4 +1,4 @@
-﻿namespace Pet.Infrastructure
+﻿namespace Pet.Options
 {
     public class JwtOptions
     {

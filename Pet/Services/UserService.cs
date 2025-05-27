@@ -43,7 +43,7 @@ namespace Pet.Services
 
             var token = _jwtProvider.GenerateToken(user);
 
-            return "";
+            return token;
         }
 
     }
