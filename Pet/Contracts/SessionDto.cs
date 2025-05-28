@@ -1,12 +1,11 @@
-﻿namespace Pet.Models
+﻿using Pet.Models;
+
+namespace Pet.Contracts
 {
-    public class SessionEntity
+    public record SessionDto
     {
-        public int Id { get; set; }
         public int HallId { get; set; }
-        public virtual HallEntity Hall { get; set; }
         public int MovieId { get; set; }
-        public virtual MovieEntity Movie { get; set; }
         public TimeSpan Time { get; set; }
         public DateTime DateTime { get; set; }
         public decimal Price { get; set; }

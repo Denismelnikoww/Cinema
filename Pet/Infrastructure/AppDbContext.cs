@@ -14,6 +14,7 @@ namespace Pet.Models
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
+                .UseLazyLoadingProxies()
                 .UseNpgsql(_configuration.GetConnectionString("Database"))
                 .UseLoggerFactory(CreateLoggerFactory())
                 .EnableSensitiveDataLogging();

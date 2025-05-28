@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Pet.Contracts;
 using Pet.Models;
 
 namespace Pet.Repositories
@@ -48,17 +50,9 @@ namespace Pet.Repositories
                                     .ToListAsync(cancellationToken); 
         }
 
-        public async Task Add(string title, string author, float rating,
-            string description, TimeSpan time, CancellationToken cancellationToken)
+        public async Task Add([FromBody]MovieDto movieDto, CancellationToken cancellationToken)
         {
-            var movie = new MovieEntity()
-            {
-                Author = author,
-                Title = title,
-                Rating = rating,
-                Description = description,
-                Time = time,
-            };
+            var movie = Mapper.MapToEntity(movieDto);
 
             await _context.AddAsync(movie);
             await _context.SaveChangesAsync(cancellationToken);

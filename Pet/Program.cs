@@ -21,6 +21,7 @@ namespace Pet
             services.AddScoped<HallRepository>();
             services.AddScoped<MovieRepository>();
             services.AddScoped<UserRepository>();
+            services.AddScoped<SessionRepository>();
             services.AddScoped<UserService>();
             services.AddScoped<JwtProvider>();
             services.AddScoped<PasswordHasher>();

@@ -7,6 +7,6 @@
         public bool IsAdmin { get; set; } = false;
         public required string Email { get; set; }
         public required string PasswordHash { get; set; }
-        public ICollection<BookingEntity> Bookings { get; set; } = new List<BookingEntity>();
+        public virtual ICollection<BookingEntity> Bookings { get; set; } = new List<BookingEntity>();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Pet.Contracts;
 using Pet.Models;
 using System;
 
@@ -13,23 +14,41 @@ namespace Pet.Repositories
             _context = context;
         }
 
-        public async Task<List<SessionEntity>> GetAllByHall(HallEntity hall)
+        public async Task<List<SessionEntity>> GetAllByHall(int hallId,
+            CancellationToken cancellationToken)
         {
             return await _context.Sessions
-                 .Where(session => session.HallId == hall.Id)
-                 .ToListAsync();
+                 .Where(session => session.HallId == hallId)
+                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<List<SessionEntity>> GetAllByMovie(MovieEntity movie)
+        public async Task<List<SessionEntity>> GetAllByMovie(int movieId,
+            CancellationToken cancellationToken)
         {
             return await _context.Sessions
-                .Where(session => session.MovieId == movie.Id)
-                .ToListAsync();
+                .Where(session => session.MovieId == movieId)
+                .ToListAsync(cancellationToken);
         }
 
-        public async Task<SessionEntity?> GetById(int id)
+        public async Task<SessionEntity?> GetById(int id,
+            CancellationToken cancellationToken)
         {
-            return await _context.Sessions.FindAsync(id);
+            return await _context.Sessions.FindAsync(id, cancellationToken);
+        }
+
+        public async Task Create(SessionDto session, CancellationToken cancellationToken)
+        {
+            SessionEntity sessionEntity = new SessionEntity
+            {
+                MovieId = session.MovieId,
+                DateTime = session.DateTime,
+                HallId = session.HallId,
+                Price = session.Price,
+                Time = session.Time,
+            };
+
+            await _context.Sessions.AddAsync(sessionEntity, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }

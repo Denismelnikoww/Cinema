@@ -15,9 +15,15 @@ namespace Pet.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
-            var listMovies = await _repository.GetAll(cancellationToken);
-            return Ok(listMovies);
+            var movies = await _repository.GetAll(cancellationToken);
 
+            var moviesDto = new List<MovieDto>();
+            foreach (var movie in movies)
+            {
+                moviesDto.Add(Mapper.MapToDto(movie));
+            }
+
+            return Ok(moviesDto);
         }
 
         [HttpPost("[action]")]
@@ -25,11 +31,7 @@ namespace Pet.Controllers
             CancellationToken cancellationToken)
         {
 
-            await _repository.Add(movieDto.Title,
-                            movieDto.Author,
-                            movieDto.Rating,
-                            movieDto.Description,
-                            movieDto.Duration,cancellationToken);
+            await _repository.Add(movieDto,cancellationToken);
 
             return Ok($"Film {movieDto.Title} successfully created");
 
@@ -38,9 +40,15 @@ namespace Pet.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> GetByPage(int page, int pageSize, CancellationToken cancellationToken)
         {
+            var movies = await _repository.GetByPage(page, pageSize, cancellationToken);
 
-            return Ok(await _repository.GetByPage(page, pageSize,cancellationToken));
+            var moviesDto = new List<MovieDto>();
+            foreach (var movie in movies)
+            {
+                moviesDto.Add(Mapper.MapToDto(movie));
+            }
 
+            return Ok(moviesDto);
         }
 
         [HttpGet("[action]/{title}")]
@@ -51,25 +59,32 @@ namespace Pet.Controllers
 
             if (movies.Count == 0)
             {
-                throw new Exception("No found");
+                return NotFound("Movies with this title does not exist");
             }
 
-            return Ok(movies);
+            var moviesDto = new List<MovieDto>();
+            foreach (var movie in movies)
+            {
+                moviesDto.Add(Mapper.MapToDto(movie));
+            }
 
+            return Ok(moviesDto);
         }
 
         [HttpGet("[action]/{id}")]
         public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
         {
 
-            var movies = await _repository.GetById(id, cancellationToken);
+            var movie = await _repository.GetById(id, cancellationToken);
 
-            if (movies == null)
+            if (movie == null)
             {
-                throw new Exception("No found");
+                return NotFound("Movie with this id does not exist");
             }
 
-            return Ok(movies);
+            var movieDto = Mapper.MapToDto(movie);
+
+            return Ok(movieDto);
         }
     }
 }

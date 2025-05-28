@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Pet.Contracts;
 using Pet.Models;
 
 namespace Pet.Repositories
@@ -33,15 +35,10 @@ namespace Pet.Repositories
             return await _context.Halls.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
-        public async Task Add(int countSeats, string name, bool isWorking,
+        public async Task Add([FromBody] HallDto hallDto,
             CancellationToken cancellationToken)
         {
-            var hall = new HallEntity
-            {
-                CountSeats = countSeats,
-                Name = name,
-                IsWorking = isWorking
-            };
+            var hall = Mapper.MapToEntity(hallDto);
 
             _context.Halls.Add(hall);
             await _context.SaveChangesAsync(cancellationToken);

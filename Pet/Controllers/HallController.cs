@@ -24,7 +24,8 @@ namespace Pet.Controllers
         public async Task<IActionResult> Create([FromBody] HallDto hall,
             CancellationToken cancellationToken)
         {
-            await repository.Add(hall.CountSeats, hall.Name, hall.IsWorking, cancellationToken);
+            await repository.Add(hall, cancellationToken);
+
             return Ok("Зал успешно создан");
         }
 
@@ -34,21 +35,16 @@ namespace Pet.Controllers
 
             var halls = await repository.GetAll(cancellationToken);
 
-            var dtoList = new List<HallDto>();
+            var hallsDto = new List<HallDto>();
 
-            foreach (var item in halls)
+            foreach (var hall in halls)
             {
-                var dto = new HallDto
-                {
-                    Name = item.Name,
-                    IsWorking = item.IsWorking,
-                    CountSeats = item.CountSeats,
-                };
+                var hallDto = Mapper.MapToDto(hall);
 
-                dtoList.Add(dto);
+                hallsDto.Add(hallDto);
             }
 
-            return Ok(dtoList);
+            return Ok(hallsDto);
 
         }
 
@@ -60,17 +56,12 @@ namespace Pet.Controllers
 
             if (hall == null)
             {
-                throw new BadHttpRequestException("Зала с таким айди не существует");
+                return NotFound("Hall with this id does not exist");
             }
 
-            var dto = new HallDto
-            {
-                Name = hall.Name,
-                IsWorking = hall.IsWorking,
-                CountSeats = hall.CountSeats,
-            };
+            var hallDto = Mapper.MapToDto(hall);
 
-            return Ok(dto);
+            return Ok(hallDto);
 
         }
         [HttpDelete("[action]/{id}")]
@@ -85,11 +76,8 @@ namespace Pet.Controllers
         [HttpDelete("[action]/{name}")]
         public async Task<IActionResult> DeleteByName(string name, CancellationToken cancellationToken)
         {
-
             await repository.DeleteByName(name, cancellationToken);
             return Ok("Зал удален");
-
-
         }
 
         [HttpPut("[action]/{id}")]
