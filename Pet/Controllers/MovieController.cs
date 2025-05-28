@@ -13,40 +13,41 @@ namespace Pet.Controllers
         public MovieController(MovieRepository movieRepository) { _repository = movieRepository; }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
-            var listMovies = await _repository.GetAll();
+            var listMovies = await _repository.GetAll(cancellationToken);
             return Ok(listMovies);
 
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Create([FromBody] MovieDto movieDto)
+        public async Task<IActionResult> Create([FromBody] MovieDto movieDto,
+            CancellationToken cancellationToken)
         {
 
             await _repository.Add(movieDto.Title,
                             movieDto.Author,
                             movieDto.Rating,
                             movieDto.Description,
-                            movieDto.Duration);
+                            movieDto.Duration,cancellationToken);
 
             return Ok($"Film {movieDto.Title} successfully created");
 
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetByPage(int page, int pageSize)
+        public async Task<IActionResult> GetByPage(int page, int pageSize, CancellationToken cancellationToken)
         {
 
-            return Ok(await _repository.GetByPage(page, pageSize));
+            return Ok(await _repository.GetByPage(page, pageSize,cancellationToken));
 
         }
 
         [HttpGet("[action]/{title}")]
-        public async Task<IActionResult> GetByName(string title)
+        public async Task<IActionResult> GetByName(string title, CancellationToken cancellationToken)
         {
 
-            var movies = await _repository.GetFilterTitle(title);
+            var movies = await _repository.GetFilterTitle(title, cancellationToken);
 
             if (movies.Count == 0)
             {
@@ -58,10 +59,10 @@ namespace Pet.Controllers
         }
 
         [HttpGet("[action]/{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
         {
 
-            var movies = await _repository.GetById(id);
+            var movies = await _repository.GetById(id, cancellationToken);
 
             if (movies == null)
             {

@@ -26,9 +26,10 @@ namespace Pet.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
+        public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest,
+                                               CancellationToken cancellationToken)
         {
-            var token = await _userService.Login(loginRequest.Email, loginRequest.Password);
+            var token = await _userService.Login(loginRequest.Email, loginRequest.Password, cancellationToken);
 
             Response.Cookies.Append(_authOptions.Value.CookieName, token);
 
@@ -36,11 +37,13 @@ namespace Pet.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest registerRequest)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest registerRequest,
+            CancellationToken cancellationToken)
         {
             await _userService.Register(registerRequest.UserName,
                 registerRequest.Password,
-                registerRequest.Email);
+                registerRequest.Email,
+                cancellationToken);
 
             return Ok("User has been successfully registered");
         }

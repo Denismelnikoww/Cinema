@@ -12,26 +12,28 @@ namespace Pet.Repositories
             _context = appDbContext;
         }
 
-        public async Task<UserEntity?> GetById(int id)
+        public async Task<UserEntity?> GetById(int id, CancellationToken cancellationToken)
         {
             return await _context.Users
-                .FindAsync(id);
+                .FindAsync(id, cancellationToken);
         }
 
-        public async Task<UserEntity?> GetByEmail(string email)
+        public async Task<UserEntity?> GetByEmail(string email, CancellationToken cancellationToken)
         {
             return await _context.Users
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Email == email);
+                .FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
         }
 
-        
 
-        public async Task Add(string userName, string passwordHash, string email, bool isAdmin)
+
+        public async Task Add(string userName, string passwordHash, string email,
+            bool isAdmin, CancellationToken cancellationToken)
         {
-            var alreadyExists = await GetByEmail(email);
+            var alreadyExists = await GetByEmail(email, cancellationToken);
 
-            if (alreadyExists != null) {
+            if (alreadyExists != null)
+            {
                 throw new BadHttpRequestException("This user is already registered");
             }
 
@@ -44,7 +46,7 @@ namespace Pet.Repositories
             };
 
             await _context.Users.AddAsync(User);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }

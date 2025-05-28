@@ -18,16 +18,18 @@ namespace Pet.Services
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;
         }
-        public async Task Register(string userName, string password, string email)
+        public async Task Register(string userName, string password, 
+            string email, CancellationToken cancellationToken)
         {
             var hashedPassword = _passwordHasher.Generate(password);
 
-            await _userRepository.Add(userName, hashedPassword, email, false);
+            await _userRepository.Add(userName, hashedPassword, email, false, cancellationToken);
         }
 
-        public async Task<string> Login(string email, string password)
+        public async Task<string> Login(string email, string password, 
+            CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetByEmail(email);
+            var user = await _userRepository.GetByEmail(email, cancellationToken);
 
             if (user == null)
             {
