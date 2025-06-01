@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Cinema.Contracts;
 using Cinema.Repositories;
+using FluentValidation;
 
 namespace Cinema.Controllers
 {
@@ -9,10 +10,13 @@ namespace Cinema.Controllers
     public class SessionController : ControllerBase
     {
         private readonly SessionRepository _sessionRepository;
+        private readonly IValidator<SessionDto> _validator;
 
-        public SessionController(SessionRepository sessionRepository)
+        public SessionController(SessionRepository sessionRepository,
+            IValidator<SessionDto> validator)
         {
             _sessionRepository = sessionRepository;
+            _validator = validator; 
         }
 
         [HttpGet("[action]/{id}")]
@@ -59,10 +63,17 @@ namespace Cinema.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> CreateSession([FromBody] SessionDto session,
+        public async Task<IActionResult> CreateSession([FromBody] SessionDto sessionDto,
             CancellationToken cancellationToken)
         {
-            await _sessionRepository.Create(session, cancellationToken);
+            var result = await _validator.ValidateAsync(sessionDto, cancellationToken);
+
+            if (!result.IsValid)
+            {
+                return BadRequest(result.ToDictionary());
+            }
+
+            await _sessionRepository.Create(sessionDto, cancellationToken);
 
             return Ok("Session was successfully created");
         }

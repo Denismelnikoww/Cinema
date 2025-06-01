@@ -5,26 +5,36 @@ using Cinema.Contracts;
 using Cinema.Repositories;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using FluentValidation;
 
 namespace Cinema.Controllers
 {
     [ApiController]
     [Route("[Controller]")]
-    [Authorize]
     public class HallController : ControllerBase
     {
         private readonly HallRepository repository;
+        private readonly IValidator<HallDto> _validator;
 
-        public HallController(HallRepository hallRepository)
+        public HallController(HallRepository hallRepository,
+            IValidator<HallDto> validator)
         {
             repository = hallRepository;
+            _validator = validator;
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Create([FromBody] HallDto hall,
+        public async Task<IActionResult> Create([FromBody] HallDto hallDto,
             CancellationToken cancellationToken)
         {
-            await repository.Add(hall, cancellationToken);
+            var result = await _validator.ValidateAsync(hallDto, cancellationToken);
+
+            if (!result.IsValid)
+            {
+                return BadRequest(result.ToDictionary());
+            }
+
+            await repository.Add(hallDto, cancellationToken);
 
             return Ok("Зал успешно создан");
         }

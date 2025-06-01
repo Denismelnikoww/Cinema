@@ -8,6 +8,7 @@ using Cinema.Models;
 using Cinema.Options;
 using Cinema.Repositories;
 using Cinema.Services;
+using FluentValidation;
 
 namespace Cinema
 {
@@ -26,6 +27,8 @@ namespace Cinema
             services.AddScoped<UserService>();
             services.AddScoped<JwtProvider>();
             services.AddScoped<PasswordHasher>();
+
+            services.AddValidatorsFromAssemblyContaining<Program>();
 
             builder.Configuration.AddUserSecrets<Program>();
 

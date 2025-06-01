@@ -2,6 +2,7 @@
 using Cinema.Contracts;
 using Cinema.Models;
 using Cinema.Repositories;
+using FluentValidation;
 
 namespace Cinema.Controllers
 {
@@ -10,9 +11,12 @@ namespace Cinema.Controllers
     public class MovieController : ControllerBase
     {
         private readonly MovieRepository _repository;
-        public MovieController(MovieRepository movieRepository)
+        private readonly IValidator<MovieDto> _validator;
+        public MovieController(MovieRepository movieRepository,
+            IValidator<MovieDto> validator)
         {
             _repository = movieRepository;
+            _validator = validator;
         }
 
         [HttpGet("[action]")]
@@ -34,6 +38,12 @@ namespace Cinema.Controllers
         public async Task<IActionResult> Create([FromBody] MovieDto movieDto,
             CancellationToken cancellationToken)
         {
+            var result = await _validator.ValidateAsync(movieDto, cancellationToken);
+
+            if (!result.IsValid)
+            {
+                return BadRequest(result.ToDictionary());
+            }
 
             await _repository.Add(movieDto, cancellationToken);
 

@@ -1,7 +1,9 @@
 ﻿using Cinema.Contracts;
 using Cinema.Models;
 using Cinema.Repositories;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace Cinema.Controllers
 {
@@ -10,10 +12,13 @@ namespace Cinema.Controllers
     public class BookingController : ControllerBase
     {
         private readonly BookingRepository _bookingRepository;
+        private readonly IValidator<BookingDto> _validator;
 
-        public BookingController(BookingRepository bookingRepository)
+        public BookingController(BookingRepository bookingRepository,
+            IValidator<BookingDto> validator)
         {
             _bookingRepository = bookingRepository;
+            _validator = validator;
         }
 
         [HttpGet("[action]/{id}")]
@@ -76,6 +81,13 @@ namespace Cinema.Controllers
         public async Task<IActionResult> Create([FromBody] BookingDto bookingDto,
             CancellationToken cancellationToken)
         {
+            var result = await _validator.ValidateAsync(bookingDto, cancellationToken);
+
+            if (!result.IsValid)
+            {
+                return BadRequest(result.ToDictionary());
+            }
+
             await _bookingRepository.Add(bookingDto, cancellationToken);
 
             return Ok();
