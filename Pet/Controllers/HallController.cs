@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Pet.Contracts;
-using Pet.Repositories;
+using Cinema.Contracts;
+using Cinema.Repositories;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Pet.Controllers
+namespace Cinema.Controllers
 {
     [ApiController]
     [Route("[Controller]")]

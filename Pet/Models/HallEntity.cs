@@ -1,4 +1,4 @@
-﻿namespace Pet.Models
+﻿namespace Cinema.Models
 {
     public class HallEntity
     {
@@ -6,6 +6,6 @@
         public string Name { get; set; }   
         public bool IsWorking { get; set; }
         public required int CountSeats { get; set; }
-        public virtual ICollection<SessionEntity> Sessions { get; set; } = new List<SessionEntity>();
+        public ICollection<SessionEntity> Sessions { get; set; } = [];
     }
 }

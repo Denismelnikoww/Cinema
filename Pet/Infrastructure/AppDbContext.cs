@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Cinema.Models;
+using System.Reflection;
 
-namespace Pet.Models
+namespace Cinema.Infrastructure
 {
     public class AppDbContext : DbContext
     {
@@ -14,12 +16,17 @@ namespace Pet.Models
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
-                .UseLazyLoadingProxies()
                 .UseNpgsql(_configuration.GetConnectionString("Database"))
                 .UseLoggerFactory(CreateLoggerFactory())
                 .EnableSensitiveDataLogging();
         }
-        
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(
+                Assembly.GetExecutingAssembly());
+        }
+
         public ILoggerFactory CreateLoggerFactory()
         {
             return LoggerFactory.Create(builder => { builder.AddConsole(); });

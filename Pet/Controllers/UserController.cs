@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Pet.Contracts;
-using Pet.Options;
-using Pet.Repositories;
-using Pet.Services;
+using Cinema.Contracts;
+using Cinema.Options;
+using Cinema.Repositories;
+using Cinema.Services;
 
-namespace Pet.Controllers
+namespace Cinema.Controllers
 {
 
     [ApiController]

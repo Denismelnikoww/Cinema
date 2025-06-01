@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Pet.Models;
-using Pet.Options;
+using Cinema.Models;
+using Cinema.Options;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Pet.Infrastructure
+namespace Cinema.Infrastructure
 {
     public class JwtProvider
     {

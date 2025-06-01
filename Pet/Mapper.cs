@@ -1,8 +1,8 @@
-﻿using Pet.Contracts;
-using Pet.Models;
+﻿using Cinema.Contracts;
+using Cinema.Models;
 using System;
 
-namespace Pet
+namespace Cinema
 {
     public static class Mapper
     {
@@ -61,7 +61,7 @@ namespace Pet
                 Time = sessionEntity.Time,
             };
         }
-        
+
         public static SessionEntity MapToEntity(SessionDto sessionDto)
         {
             return new SessionEntity
@@ -71,6 +71,26 @@ namespace Pet
                 Price = sessionDto.Price,
                 HallId = sessionDto.HallId,
                 MovieId = sessionDto.MovieId,
+            };
+        }
+
+        public static BookingEntity MapToEntity(BookingDto bookingDto)
+        {
+            return new BookingEntity
+            {
+                SeatNumber = bookingDto.SeatNumber,
+                SessionId = bookingDto.SessionId,
+                UserId = bookingDto.UserId,
+            };
+        }
+
+        public static BookingDto MapToDto(BookingEntity bookingDto)
+        {
+            return new BookingDto
+            {
+                UserId = bookingDto.UserId,
+                SeatNumber = bookingDto.SeatNumber,
+                SessionId = bookingDto.SessionId
             };
         }
     }

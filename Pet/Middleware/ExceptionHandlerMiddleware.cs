@@ -1,4 +1,4 @@
-﻿namespace Pet.Middleware
+﻿namespace Cinema.Middleware
 {
     public class ExceptionHandlerMiddleware
     {

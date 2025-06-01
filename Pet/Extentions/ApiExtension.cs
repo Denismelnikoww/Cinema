@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Pet.Options;
+using Cinema.Options;
 using System.Text;
 
-namespace Pet.Extentions
+namespace Cinema.Extentions
 {
     public static class ApiExtension
     {

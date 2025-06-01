@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Pet.Contracts;
-using Pet.Repositories;
+using Cinema.Contracts;
+using Cinema.Repositories;
 
-namespace Pet.Controllers
+namespace Cinema.Controllers
 {
     [ApiController]
     [Route("[controller]")]

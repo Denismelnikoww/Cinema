@@ -1,16 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Pet.Contracts;
-using Pet.Models;
-using Pet.Repositories;
+using Cinema.Contracts;
+using Cinema.Models;
+using Cinema.Repositories;
 
-namespace Pet.Controllers
+namespace Cinema.Controllers
 {
     [ApiController]
     [Route("[Controller]")]
     public class MovieController : ControllerBase
     {
         private readonly MovieRepository _repository;
-        public MovieController(MovieRepository movieRepository) { _repository = movieRepository; }
+        public MovieController(MovieRepository movieRepository)
+        {
+            _repository = movieRepository;
+        }
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
@@ -18,6 +21,7 @@ namespace Pet.Controllers
             var movies = await _repository.GetAll(cancellationToken);
 
             var moviesDto = new List<MovieDto>();
+
             foreach (var movie in movies)
             {
                 moviesDto.Add(Mapper.MapToDto(movie));
@@ -30,8 +34,8 @@ namespace Pet.Controllers
         public async Task<IActionResult> Create([FromBody] MovieDto movieDto,
             CancellationToken cancellationToken)
         {
-             
-            await _repository.Add(movieDto,cancellationToken);
+
+            await _repository.Add(movieDto, cancellationToken);
 
             return Ok($"Film {movieDto.Title} successfully created");
 
@@ -63,6 +67,7 @@ namespace Pet.Controllers
             }
 
             var moviesDto = new List<MovieDto>();
+
             foreach (var movie in movies)
             {
                 moviesDto.Add(Mapper.MapToDto(movie));

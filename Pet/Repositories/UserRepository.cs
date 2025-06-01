@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Pet.Models;
+using Cinema.Models;
+using Cinema.Infrastructure;
 
-namespace Pet.Repositories
+namespace Cinema.Repositories
 {
     public class UserRepository
     {
@@ -40,12 +41,11 @@ namespace Pet.Repositories
             var User = new UserEntity
             {
                 Email = email,
-                IsAdmin = isAdmin,
                 Name = userName,
                 PasswordHash = passwordHash
             };
 
-            await _context.Users.AddAsync(User);
+            await _context.Users.AddAsync(User, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
         }
     }

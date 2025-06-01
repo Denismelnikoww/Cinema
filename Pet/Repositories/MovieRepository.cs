@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Pet.Contracts;
-using Pet.Models;
+using Cinema.Contracts;
+using Cinema.Models;
+using Cinema.Infrastructure;
 
-namespace Pet.Repositories
+namespace Cinema.Repositories
 {
     public class MovieRepository
     {
@@ -54,7 +55,7 @@ namespace Pet.Repositories
         {
             var movie = Mapper.MapToEntity(movieDto);
 
-            await _context.AddAsync(movie);
+            await _context.AddAsync(movie, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
         }
 

@@ -1,4 +1,4 @@
-﻿namespace Pet.Models
+﻿namespace Cinema.Models
 {
     public class SessionEntity
     {

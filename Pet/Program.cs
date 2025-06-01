@@ -1,15 +1,15 @@
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Pet.Extentions;
-using Pet.Infrastructure;
-using Pet.Middleware;
-using Pet.Models;
-using Pet.Options;
-using Pet.Repositories;
-using Pet.Services;
+using Cinema.Extentions;
+using Cinema.Infrastructure;
+using Cinema.Middleware;
+using Cinema.Models;
+using Cinema.Options;
+using Cinema.Repositories;
+using Cinema.Services;
 
-namespace Pet
+namespace Cinema
 {
     public class Program
     {
@@ -22,6 +22,7 @@ namespace Pet
             services.AddScoped<MovieRepository>();
             services.AddScoped<UserRepository>();
             services.AddScoped<SessionRepository>();
+            services.AddScoped<BookingRepository>();
             services.AddScoped<UserService>();
             services.AddScoped<JwtProvider>();
             services.AddScoped<PasswordHasher>();

@@ -1,4 +1,4 @@
-﻿namespace Pet.Models
+﻿namespace Cinema.Models
 {
     public class MovieEntity 
     {
@@ -8,7 +8,6 @@
         public float Rating { get; set; }
         public string Description { get; set; }
         public TimeSpan Time { get; set; }
-        public virtual ICollection<SessionEntity> Sessions { get; set; } = 
-            new List<SessionEntity>();
+        public  ICollection<SessionEntity> Sessions { get; set; } = [];
     }
 }

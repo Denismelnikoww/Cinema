@@ -1,4 +1,4 @@
-﻿namespace Pet.Contracts
+﻿namespace Cinema.Contracts
 {
     public record RegisterRequest
     {

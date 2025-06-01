@@ -1,8 +1,8 @@
-﻿using Pet.Infrastructure;
-using Pet.Repositories;
+﻿using Cinema.Infrastructure;
+using Cinema.Repositories;
 using System.Security.Authentication;
 
-namespace Pet.Services
+namespace Cinema.Services
 {
     public class UserService 
     {

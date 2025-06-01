@@ -1,4 +1,4 @@
-﻿namespace Pet.Options
+﻿namespace Cinema.Options
 {
     public class AuthOptions
     {

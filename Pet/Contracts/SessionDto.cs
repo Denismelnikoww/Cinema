@@ -1,6 +1,6 @@
-﻿using Pet.Models;
+﻿using Cinema.Models;
 
-namespace Pet.Contracts
+namespace Cinema.Contracts
 {
     public record SessionDto
     {

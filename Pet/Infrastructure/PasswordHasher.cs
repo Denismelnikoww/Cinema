@@ -1,4 +1,4 @@
-﻿namespace Pet.Infrastructure
+﻿namespace Cinema.Infrastructure
 {
     public class PasswordHasher 
     {

@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Pet.Contracts;
-using Pet.Models;
+using Cinema.Contracts;
+using Cinema.Models;
 using System;
+using Cinema.Infrastructure;
 
-namespace Pet.Repositories
+namespace Cinema.Repositories
 {
     public class SessionRepository
     {

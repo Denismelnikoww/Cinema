@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Pet.Contracts;
-using Pet.Models;
+using Cinema.Contracts;
+using Cinema.Models;
+using Cinema.Infrastructure;
 
-namespace Pet.Repositories
+namespace Cinema.Repositories
 {
     public class HallRepository
     {
@@ -40,7 +41,7 @@ namespace Pet.Repositories
         {
             var hall = Mapper.MapToEntity(hallDto);
 
-            _context.Halls.Add(hall);
+            await _context.Halls.AddAsync(hall, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
         }
 
