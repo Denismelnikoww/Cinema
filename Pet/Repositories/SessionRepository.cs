@@ -3,10 +3,11 @@ using Cinema.Contracts;
 using Cinema.Models;
 using System;
 using Cinema.Infrastructure;
+using Cinema.Interfaces;
 
 namespace Cinema.Repositories
 {
-    public class SessionRepository
+    public class SessionRepository : ISessionRepository
     {
         private readonly AppDbContext _context;
 

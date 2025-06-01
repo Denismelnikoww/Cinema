@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Cinema.Contracts;
 using Cinema.Options;
 using Cinema.Repositories;
-using Cinema.Services;
 using FluentValidation;
-using Microsoft.AspNetCore.Identity.Data;
+using Cinema.Interfaces;
+using Cinema.Services;
 
 namespace Cinema.Controllers
 {
@@ -14,16 +13,16 @@ namespace Cinema.Controllers
     [Route("[Controller]")]
     public class UserController : ControllerBase
     {
-        private readonly UserRepository _repository;
-        private readonly UserService _userService;
+        private readonly IUserRepository _repository;
+        private readonly IUserService _userService;
         private readonly IOptions<AuthOptions> _authOptions;
         private readonly IValidator<Contracts.LoginRequest> _loginValidator;
         private readonly IValidator<Contracts.RegisterRequest> _registerValidator;
 
 
         public UserController(
-            UserService userService,
-            UserRepository userRepository,
+            IUserService userService,
+            IUserRepository userRepository,
             IOptions<AuthOptions> authOptions,
             IValidator<Contracts.RegisterRequest> registerValidator,
             IValidator<Contracts.LoginRequest> loginValidator)

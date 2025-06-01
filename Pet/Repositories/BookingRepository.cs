@@ -1,12 +1,13 @@
 ﻿using Cinema.Contracts;
 using Cinema.Infrastructure;
+using Cinema.Interfaces;
 using Cinema.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.Repositories
 {
-    public class BookingRepository
+    public class BookingRepository : IBookingRepository
     {
         private readonly AppDbContext _context;
         public BookingRepository(AppDbContext context)

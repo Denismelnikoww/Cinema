@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Cinema.Contracts;
-using Cinema.Models;
-using Cinema.Repositories;
 using FluentValidation;
+using Cinema.Interfaces;
 
 namespace Cinema.Controllers
 {
@@ -10,9 +9,9 @@ namespace Cinema.Controllers
     [Route("[Controller]")]
     public class MovieController : ControllerBase
     {
-        private readonly MovieRepository _repository;
+        private readonly IMovieRepository _repository;
         private readonly IValidator<MovieDto> _validator;
-        public MovieController(MovieRepository movieRepository,
+        public MovieController(IMovieRepository movieRepository,
             IValidator<MovieDto> validator)
         {
             _repository = movieRepository;

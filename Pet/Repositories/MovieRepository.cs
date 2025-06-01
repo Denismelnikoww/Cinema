@@ -3,10 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Cinema.Contracts;
 using Cinema.Models;
 using Cinema.Infrastructure;
+using Cinema.Interfaces;
 
 namespace Cinema.Repositories
 {
-    public class MovieRepository
+    public class MovieRepository : IMovieRepository
     {
 
         private readonly AppDbContext _context;
@@ -48,10 +49,10 @@ namespace Cinema.Repositories
                                     .AsNoTracking()
                                     .Skip((page - 1) * pageSize)
                                     .Take(pageSize)
-                                    .ToListAsync(cancellationToken); 
+                                    .ToListAsync(cancellationToken);
         }
 
-        public async Task Add([FromBody]MovieDto movieDto, CancellationToken cancellationToken)
+        public async Task Add([FromBody] MovieDto movieDto, CancellationToken cancellationToken)
         {
             var movie = Mapper.MapToEntity(movieDto);
 

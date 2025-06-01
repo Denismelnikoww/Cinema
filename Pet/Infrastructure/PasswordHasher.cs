@@ -1,6 +1,8 @@
-﻿namespace Cinema.Infrastructure
+﻿using Cinema.Interfaces;
+
+namespace Cinema.Infrastructure
 {
-    public class PasswordHasher 
+    public class PasswordHasher : IPasswordHasher
     {
         public string Generate(string password)
         {

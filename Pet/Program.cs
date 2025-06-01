@@ -7,8 +7,9 @@ using Cinema.Middleware;
 using Cinema.Models;
 using Cinema.Options;
 using Cinema.Repositories;
-using Cinema.Services;
 using FluentValidation;
+using Cinema.Interfaces;
+using Cinema.Services;
 
 namespace Cinema
 {
@@ -19,16 +20,16 @@ namespace Cinema
             var builder = WebApplication.CreateBuilder(args);
             var services = builder.Services;
 
-            services.AddScoped<HallRepository>();
-            services.AddScoped<MovieRepository>();
-            services.AddScoped<UserRepository>();
-            services.AddScoped<SessionRepository>();
-            services.AddScoped<BookingRepository>();
-            services.AddScoped<UserService>();
-            services.AddScoped<JwtProvider>();
-            services.AddScoped<PasswordHasher>();
-
+            services.AddRepositories();
+            services.AddServices();
+            services.AddAuth();
             services.AddValidatorsFromAssemblyContaining<Program>();
+            services.AddProblemDetails();
+            services.AddApiAuthentication();
+            services.AddControllers();
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
+            services.AddDbContext<AppDbContext>();
 
             builder.Configuration.AddUserSecrets<Program>();
 
@@ -37,16 +38,6 @@ namespace Cinema
 
             services.Configure<AuthOptions>(builder
                 .Configuration.GetSection(nameof(AuthOptions)));
-
-            builder.Services.AddProblemDetails();
-
-            services.AddApiAuthentication();
-
-            services.AddControllers();
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
-
-            services.AddDbContext<AppDbContext>();
 
 
             var app = builder.Build();

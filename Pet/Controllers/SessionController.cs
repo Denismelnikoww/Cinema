@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Cinema.Contracts;
-using Cinema.Repositories;
 using FluentValidation;
+using Cinema.Interfaces;
 
 namespace Cinema.Controllers
 {
@@ -9,10 +9,10 @@ namespace Cinema.Controllers
     [Route("[controller]")]
     public class SessionController : ControllerBase
     {
-        private readonly SessionRepository _sessionRepository;
+        private readonly ISessionRepository _sessionRepository;
         private readonly IValidator<SessionDto> _validator;
 
-        public SessionController(SessionRepository sessionRepository,
+        public SessionController(ISessionRepository sessionRepository,
             IValidator<SessionDto> validator)
         {
             _sessionRepository = sessionRepository;

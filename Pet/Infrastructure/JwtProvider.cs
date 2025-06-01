@@ -5,10 +5,11 @@ using Cinema.Options;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Cinema.Interfaces;
 
 namespace Cinema.Infrastructure
 {
-    public class JwtProvider
+    public class JwtProvider : IJwtProvider
     {
         private readonly JwtOptions _options;
 

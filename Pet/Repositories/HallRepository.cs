@@ -3,10 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Cinema.Contracts;
 using Cinema.Models;
 using Cinema.Infrastructure;
+using Cinema.Interfaces;
 
 namespace Cinema.Repositories
 {
-    public class HallRepository
+    public class HallRepository : IHallRepository
     {
         private readonly AppDbContext _context;
 

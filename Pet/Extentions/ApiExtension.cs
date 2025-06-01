@@ -3,6 +3,10 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Cinema.Options;
 using System.Text;
+using Cinema.Interfaces;
+using Cinema.Repositories;
+using Cinema.Services;
+using Cinema.Infrastructure;
 
 namespace Cinema.Extentions
 {
@@ -42,6 +46,29 @@ namespace Cinema.Extentions
                     };
                 });
 
+            return services;
+        }
+
+        public static IServiceCollection AddRepositories(this IServiceCollection services)
+        {
+            services.AddScoped<IHallRepository, HallRepository>();
+            services.AddScoped<IMovieRepository, MovieRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ISessionRepository, SessionRepository>();
+            services.AddScoped<IBookingRepository, BookingRepository>();
+            return services;
+        }
+
+        public static IServiceCollection AddServices(this IServiceCollection services)
+        {
+            services.AddScoped<IUserService, UserService>();
+            return services;
+        }
+
+        public static IServiceCollection AddAuth(this IServiceCollection services)
+        {
+            services.AddScoped<IJwtProvider, JwtProvider>();
+            services.AddScoped<IPasswordHasher, PasswordHasher>();
             return services;
         }
     }

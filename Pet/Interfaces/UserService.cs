@@ -1,24 +1,25 @@
 ﻿using Cinema.Infrastructure;
 using Cinema.Repositories;
+using Cinema.Services;
 using System.Security.Authentication;
 
-namespace Cinema.Services
+namespace Cinema.Interfaces
 {
-    public class UserService 
+    public class UserService : IUserService
     {
-        private readonly PasswordHasher _passwordHasher;
-        private readonly UserRepository _userRepository;
-        private readonly JwtProvider _jwtProvider;
+        private readonly IPasswordHasher _passwordHasher;
+        private readonly IUserRepository _userRepository;
+        private readonly IJwtProvider _jwtProvider;
 
-        public UserService(UserRepository userRepository,
-            PasswordHasher passwordHasher,
-            JwtProvider jwtProvider)
+        public UserService(IUserRepository userRepository,
+            IPasswordHasher passwordHasher,
+            IJwtProvider jwtProvider)
         {
             _jwtProvider = jwtProvider;
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;
         }
-        public async Task Register(string userName, string password, 
+        public async Task Register(string userName, string password,
             string email, CancellationToken cancellationToken)
         {
             var hashedPassword = _passwordHasher.Generate(password);
@@ -26,7 +27,7 @@ namespace Cinema.Services
             await _userRepository.Add(userName, hashedPassword, email, false, cancellationToken);
         }
 
-        public async Task<string> Login(string email, string password, 
+        public async Task<string> Login(string email, string password,
             CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetByEmail(email, cancellationToken);

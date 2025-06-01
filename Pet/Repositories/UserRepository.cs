@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Cinema.Models;
 using Cinema.Infrastructure;
+using Cinema.Interfaces;
 
 namespace Cinema.Repositories
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly AppDbContext _context;
 

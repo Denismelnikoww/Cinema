@@ -1,9 +1,7 @@
 ﻿using Cinema.Contracts;
-using Cinema.Models;
-using Cinema.Repositories;
+using Cinema.Interfaces;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
 namespace Cinema.Controllers
 {
@@ -11,10 +9,10 @@ namespace Cinema.Controllers
     [Route("[controller]")]
     public class BookingController : ControllerBase
     {
-        private readonly BookingRepository _bookingRepository;
+        private readonly IBookingRepository _bookingRepository;
         private readonly IValidator<BookingDto> _validator;
 
-        public BookingController(BookingRepository bookingRepository,
+        public BookingController(IBookingRepository bookingRepository,
             IValidator<BookingDto> validator)
         {
             _bookingRepository = bookingRepository;

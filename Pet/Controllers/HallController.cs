@@ -1,11 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Cinema.Contracts;
-using Cinema.Repositories;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 using FluentValidation;
+using Cinema.Interfaces;
 
 namespace Cinema.Controllers
 {
@@ -13,10 +9,10 @@ namespace Cinema.Controllers
     [Route("[Controller]")]
     public class HallController : ControllerBase
     {
-        private readonly HallRepository repository;
+        private readonly IHallRepository repository;
         private readonly IValidator<HallDto> _validator;
 
-        public HallController(HallRepository hallRepository,
+        public HallController(IHallRepository hallRepository,
             IValidator<HallDto> validator)
         {
             repository = hallRepository;
