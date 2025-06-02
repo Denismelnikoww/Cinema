@@ -2,6 +2,7 @@
 using Cinema.Interfaces;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace Cinema.Controllers
 {
@@ -39,10 +40,11 @@ namespace Cinema.Controllers
         {
             var bookingsEntity = await _bookingRepository.GetBySessionId(id, cancellationToken);
 
-            if (bookingsEntity.Count == 0) {
+            if (bookingsEntity.Count == 0)
+            {
                 return BadRequest("Booking on this session does not exist");
             }
-            
+
             List<BookingDto> bookingsDto = [];
 
             foreach (var bookingEntity in bookingsEntity)
@@ -79,16 +81,48 @@ namespace Cinema.Controllers
         public async Task<IActionResult> Create([FromBody] BookingDto bookingDto,
             CancellationToken cancellationToken)
         {
-            var result = await _validator.ValidateAsync(bookingDto, cancellationToken);
+            var validateResult = await _validator.ValidateAsync(bookingDto, cancellationToken);
 
-            if (!result.IsValid)
+            if (!validateResult.IsValid)
             {
-                return BadRequest(result.ToDictionary());
+                return BadRequest(validateResult.ToDictionary());
             }
 
             await _bookingRepository.Add(bookingDto, cancellationToken);
 
             return Ok();
+        }
+
+        [HttpDelete("[action]/{id}")]
+        public async Task<IActionResult> DeleteById(int id,
+            CancellationToken cancellationToken)
+        {
+            var delete = await GetById(id, cancellationToken);
+
+            if (delete == null)
+            {
+                return BadRequest("Incorrect ID");
+            }
+
+            await _bookingRepository.DeleteById(id, cancellationToken);
+
+            return Ok("The booking has been deleted");
+        }
+
+        [HttpDelete("[action]/{id}")]
+        public async Task<IActionResult> SuperDeleteById(int id,
+            CancellationToken cancellationToken)
+        {
+            var delete = await GetById(id, cancellationToken);
+
+            if (delete == null)
+            {
+                return BadRequest("Incorrect ID");
+            }
+
+            await _bookingRepository.SuperDeleteById(id, cancellationToken);
+
+            return Ok("The booking has been deleted");
         }
     }
 }

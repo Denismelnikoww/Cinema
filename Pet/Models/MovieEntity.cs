@@ -9,5 +9,6 @@
         public string Description { get; set; }
         public TimeSpan Time { get; set; }
         public  ICollection<SessionEntity> Sessions { get; set; } = [];
+        public bool IsDeleted { get; set; }
     }
 }

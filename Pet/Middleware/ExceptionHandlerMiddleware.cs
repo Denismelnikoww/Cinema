@@ -1,4 +1,6 @@
-﻿namespace Cinema.Middleware
+﻿using Cinema.Exceptions;
+
+namespace Cinema.Middleware
 {
     public class ExceptionHandlerMiddleware
     {
@@ -16,6 +18,19 @@
             try
             {
                 await _next(context);
+            }
+            catch(ApiException ex)
+            {
+                _logger.LogError(ex, "Unhandled exception occurred: {Message}", ex.Message);
+
+                context.Response.StatusCode = (int)ex.StatusCode;
+
+                await context.Response.WriteAsJsonAsync(new
+                {
+                    StatusCode = context.Response.StatusCode,
+                    Message = "An error occurred while processing your request",
+                    Detailed = context.Response.StatusCode == 500 ? null : ex.Message
+                });
             }
             catch (Exception ex)
             {

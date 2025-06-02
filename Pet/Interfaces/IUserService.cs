@@ -1,5 +1,4 @@
-﻿
-namespace Cinema.Services
+﻿namespace Cinema.Interfaces
 {
     public interface IUserService
     {

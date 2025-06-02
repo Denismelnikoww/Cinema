@@ -13,15 +13,18 @@ namespace Cinema.Extentions
     public static class ApiExtension
     {
         public static IServiceCollection AddApiAuthentication(
-            this IServiceCollection services)
+            this IServiceCollection services,
+            IConfiguration configuration)
         {
-            var serviceProvider = services.BuildServiceProvider();
-            var jwtOptions = serviceProvider.GetRequiredService<IOptions<JwtOptions>>().Value;
-            var authOptions = serviceProvider.GetRequiredService<IOptions<AuthOptions>>().Value;
-
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
+                    var jwtOptions = configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>();
+                    var authOptions = configuration.GetSection(nameof(AuthOptions)).Get<AuthOptions>();
+
+                    if (string.IsNullOrEmpty(jwtOptions?.SecretKey))
+                        throw new ArgumentNullException(nameof(jwtOptions.SecretKey));
+
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = false,
@@ -30,7 +33,6 @@ namespace Cinema.Extentions
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(
                             Encoding.UTF8.GetBytes(jwtOptions.SecretKey)),
-
                         ClockSkew = TimeSpan.Zero
                     };
 
@@ -39,8 +41,7 @@ namespace Cinema.Extentions
                         OnMessageReceived = context =>
                         {
                             context.Token = context.Request
-                                .Cookies[authOptions.CookieName];
-
+                                .Cookies[authOptions?.CookieName ?? "AuthToken"];
                             return Task.CompletedTask;
                         }
                     };
@@ -69,6 +70,15 @@ namespace Cinema.Extentions
         {
             services.AddScoped<IJwtProvider, JwtProvider>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
+            return services;
+        }
+
+        public static IServiceCollection AddConfiguration(this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            services.Configure<AuthOptions>(configuration.GetSection(nameof(AuthOptions)));
+            services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
+
             return services;
         }
     }

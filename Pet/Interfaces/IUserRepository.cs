@@ -7,5 +7,7 @@ namespace Cinema.Interfaces
         Task Add(string userName, string passwordHash, string email, bool isAdmin, CancellationToken cancellationToken);
         Task<UserEntity?> GetByEmail(string email, CancellationToken cancellationToken);
         Task<UserEntity?> GetById(int id, CancellationToken cancellationToken);
+        Task DeleteById(int id, CancellationToken cancellationToken);
+        Task SuperDeleteById(int id, CancellationToken cancellationToken);
     }
 }

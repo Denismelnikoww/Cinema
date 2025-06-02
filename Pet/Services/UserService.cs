@@ -1,7 +1,5 @@
-﻿using Cinema.Infrastructure;
-using Cinema.Repositories;
-using Cinema.Services;
-using System.Security.Authentication;
+﻿using Cinema.Exceptions;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Cinema.Interfaces
 {
@@ -34,14 +32,14 @@ namespace Cinema.Interfaces
 
             if (user == null)
             {
-                throw new Exception("Users with this email not found");
+                throw new BadRequestException("User with this id does not exist");
             }
 
             var result = _passwordHasher.Verify(password, user.PasswordHash);
 
             if (result == false)
             {
-                throw new Exception("Failed to login");
+                throw new BadRequestException("Failed to login");
             }
 
             var token = _jwtProvider.GenerateToken(user);

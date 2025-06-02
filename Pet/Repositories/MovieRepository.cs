@@ -17,6 +17,24 @@ namespace Cinema.Repositories
             _context = appDbContext;
         }
 
+        public async Task DeleteById(int id,CancellationToken cancellationToken)
+        {
+           await _context.Bookings
+                .Where(x=>x.Id == id)
+                .ExecuteUpdateAsync(s => s
+                .SetProperty(m => m.IsDeleted,true),
+                cancellationToken);
+        }
+
+        public async Task SuperDeleteById(int id,CancellationToken cancellationToken)
+        {
+            var delete = await _context.Bookings
+                .FindAsync(id,cancellationToken);
+
+            _context.Bookings.Remove(delete);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+
         public async Task<List<MovieEntity>> GetAll(CancellationToken cancellationToken)
         {
             return await _context.Movies

@@ -6,6 +6,8 @@ namespace Cinema.Interfaces
 {
     public interface IBookingRepository
     {
+        Task DeleteById(int id, CancellationToken cancellationToken);
+        Task SuperDeleteById(int id, CancellationToken cancellationToken);
         Task Add([FromBody] BookingDto bookingDto, CancellationToken cancellationToken);
         Task<BookingEntity?> GetById(int id, CancellationToken cancellationToken);
         Task<List<BookingEntity>> GetBySessionId(int id, CancellationToken cancellationToken);

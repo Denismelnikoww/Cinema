@@ -1,17 +1,10 @@
 using Microsoft.AspNetCore.CookiePolicy;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Cinema.Extentions;
 using Cinema.Infrastructure;
-using Cinema.Middleware;
-using Cinema.Models;
 using Cinema.Options;
-using Cinema.Repositories;
 using FluentValidation;
-using Cinema.Interfaces;
-using Cinema.Services;
 
-namespace Cinema
+namespace Cinema.Services
 {
     public class Program
     {
@@ -23,41 +16,26 @@ namespace Cinema
             services.AddRepositories();
             services.AddServices();
             services.AddAuth();
+            services.AddApiAuthentication(builder.Configuration);
+            services.AddDbContext<AppDbContext>();
+
             services.AddValidatorsFromAssemblyContaining<Program>();
             services.AddProblemDetails();
-            services.AddApiAuthentication();
             services.AddControllers();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
-            services.AddDbContext<AppDbContext>();
 
             builder.Configuration.AddUserSecrets<Program>();
 
-            services.Configure<JwtOptions>(builder
-                .Configuration.GetSection(nameof(JwtOptions)));
-
-            services.Configure<AuthOptions>(builder
-                .Configuration.GetSection(nameof(AuthOptions)));
-
+            services.AddConfiguration(builder.Configuration);
 
             var app = builder.Build();
 
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage(); 
-            }
-            else
-            {
-                app.UseExceptionHandler("/error"); 
-            }
 
+            app.UseMyExceptionMiddleware();
 
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-                app.UseDeveloperExceptionPage();
-            }
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.UseHttpsRedirection();
 
@@ -73,6 +51,17 @@ namespace Cinema
             app.UseAuthorization();
 
             app.MapControllers();
+
+            var jwtOptions = builder.Configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>();
+            var authOptions = builder.Configuration.GetSection(nameof(AuthOptions)).Get<AuthOptions>();
+
+            Console.WriteLine($"JWT Secret: {jwtOptions?.SecretKey}");
+            Console.WriteLine($"Auth Cookie: {authOptions?.CookieName}");
+
+            if (string.IsNullOrEmpty(jwtOptions?.SecretKey))
+                throw new Exception("JWT Secret Key is not configured");
+            if (string.IsNullOrEmpty(authOptions?.CookieName))
+                throw new Exception("Auth Cookie Name is not configured");
 
             app.Run();
         }

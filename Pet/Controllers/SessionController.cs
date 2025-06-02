@@ -2,6 +2,7 @@
 using Cinema.Contracts;
 using FluentValidation;
 using Cinema.Interfaces;
+using Cinema.Repositories;
 
 namespace Cinema.Controllers
 {
@@ -32,7 +33,6 @@ namespace Cinema.Controllers
 
             return Ok(session);
         }
-
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAllByMovie(int movieId,
@@ -66,16 +66,46 @@ namespace Cinema.Controllers
         public async Task<IActionResult> CreateSession([FromBody] SessionDto sessionDto,
             CancellationToken cancellationToken)
         {
-            var result = await _validator.ValidateAsync(sessionDto, cancellationToken);
+            var validateResult = await _validator.ValidateAsync(sessionDto, cancellationToken);
 
-            if (!result.IsValid)
+            if (!validateResult.IsValid)
             {
-                return BadRequest(result.ToDictionary());
+                return BadRequest(validateResult.ToDictionary());
             }
 
             await _sessionRepository.Create(sessionDto, cancellationToken);
 
             return Ok("Session was successfully created");
+        }
+
+        [HttpDelete("[action]/{id}")]
+        public async Task<IActionResult> DeleteById(int id,
+            CancellationToken cancellationToken)
+        {
+            var delete = await GetById(id, cancellationToken);
+
+            if (delete == null)
+            {
+                return BadRequest("Incorrect ID");
+            }
+
+            await _sessionRepository.DeleteById(id, cancellationToken);
+            return Ok("The session has been deleted");
+        }
+
+        [HttpDelete("[action]/{id}")]
+        public async Task<IActionResult> SuperDeleteById(int id,
+    CancellationToken cancellationToken)
+        {
+            var delete = await GetById(id, cancellationToken);
+
+            if (delete == null)
+            {
+                return BadRequest("Incorrect ID");
+            }
+
+            await _sessionRepository.SuperDeleteById(id, cancellationToken);
+            return Ok("The session has been deleted");
         }
     }
 }

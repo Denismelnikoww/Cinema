@@ -20,14 +20,30 @@ namespace Cinema.Repositories
                 .FindAsync(id, cancellationToken);
         }
 
+        public async Task DeleteById(int id, CancellationToken cancellationToken)
+        {
+            await _context.Users
+                 .Where(x => x.Id == id)
+                 .ExecuteUpdateAsync(s => s
+                 .SetProperty(m => m.IsDeleted, true),
+                 cancellationToken);
+        }
+
+        public async Task SuperDeleteById(int id, CancellationToken cancellationToken)
+        {
+            var delete = await _context.Users
+                .FindAsync(id, cancellationToken);
+
+            _context.Users.Remove(delete);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+
         public async Task<UserEntity?> GetByEmail(string email, CancellationToken cancellationToken)
         {
             return await _context.Users
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
         }
-
-
 
         public async Task Add(string userName, string passwordHash, string email,
             bool isAdmin, CancellationToken cancellationToken)

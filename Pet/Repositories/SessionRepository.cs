@@ -16,6 +16,24 @@ namespace Cinema.Repositories
             _context = context;
         }
 
+        public async Task DeleteById(int id, CancellationToken cancellationToken)
+        {
+            await _context.Sessions
+                 .Where(x => x.Id == id)
+                 .ExecuteUpdateAsync(s => s
+                 .SetProperty(m => m.IsDeleted, true),
+                 cancellationToken);
+        }
+
+        public async Task SuperDeleteById(int id, CancellationToken cancellationToken)
+        {
+            var delete = await _context.Sessions
+                .FindAsync(id, cancellationToken);
+
+            _context.Sessions.Remove(delete);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+
         public async Task<List<SessionEntity>> GetAllByHall(int hallId,
             CancellationToken cancellationToken)
         {

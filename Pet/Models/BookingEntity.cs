@@ -8,5 +8,6 @@
         public required int SessionId { get; set; }
         public SessionEntity Session { get; set; }
         public required int SeatNumber { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

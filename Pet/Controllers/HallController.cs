@@ -9,13 +9,13 @@ namespace Cinema.Controllers
     [Route("[Controller]")]
     public class HallController : ControllerBase
     {
-        private readonly IHallRepository repository;
+        private readonly IHallRepository _hallRepository;
         private readonly IValidator<HallDto> _validator;
 
         public HallController(IHallRepository hallRepository,
             IValidator<HallDto> validator)
         {
-            repository = hallRepository;
+            _hallRepository = hallRepository;
             _validator = validator;
         }
 
@@ -23,23 +23,23 @@ namespace Cinema.Controllers
         public async Task<IActionResult> Create([FromBody] HallDto hallDto,
             CancellationToken cancellationToken)
         {
-            var result = await _validator.ValidateAsync(hallDto, cancellationToken);
+            var validateResult = await _validator.ValidateAsync(hallDto, cancellationToken);
 
-            if (!result.IsValid)
+            if (!validateResult.IsValid)
             {
-                return BadRequest(result.ToDictionary());
+                return BadRequest(validateResult.ToDictionary());
             }
 
-            await repository.Add(hallDto, cancellationToken);
+            await _hallRepository.Add(hallDto, cancellationToken);
 
-            return Ok("Зал успешно создан");
+            return Ok("The hall was successfully created");
         }
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
 
-            var halls = await repository.GetAll(cancellationToken);
+            var halls = await _hallRepository.GetAll(cancellationToken);
 
             var hallsDto = new List<HallDto>();
 
@@ -55,10 +55,10 @@ namespace Cinema.Controllers
         }
 
         [HttpGet("[action]/{id}")]
-        public async Task<IActionResult> Get(int id, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
         {
 
-            var hall = await repository.GetById(id, cancellationToken);
+            var hall = await _hallRepository.GetById(id, cancellationToken);
 
             if (hall == null)
             {
@@ -70,20 +70,35 @@ namespace Cinema.Controllers
             return Ok(hallDto);
 
         }
+
         [HttpDelete("[action]/{id}")]
-        public async Task<IActionResult> DeleteById(int id, CancellationToken cancellationToken)
+        public async Task<IActionResult> DeleteById(int id,
+            CancellationToken cancellationToken)
         {
+            var delete = await GetById(id, cancellationToken);
 
-            await repository.DeleteById(id, cancellationToken);
-            return Ok("Зал удален");
+            if (delete == null)
+            {
+                return BadRequest("Incorrect ID");
+            }
 
+            await _hallRepository.DeleteById(id, cancellationToken);
+            return Ok("The hall has been deleted");
         }
 
-        [HttpDelete("[action]/{name}")]
-        public async Task<IActionResult> DeleteByName(string name, CancellationToken cancellationToken)
+            [HttpDelete("[action]/{id}")]
+        public async Task<IActionResult> SuperDeleteById(int id, 
+        CancellationToken cancellationToken)
         {
-            await repository.DeleteByName(name, cancellationToken);
-            return Ok("Зал удален");
+            var delete = await GetById(id, cancellationToken);
+
+            if (delete == null)
+            {
+                return BadRequest("Incorrect ID");
+            }
+
+            await _hallRepository.SuperDeleteById(id, cancellationToken);
+            return Ok("The hall has been deleted");
         }
 
         [HttpPut("[action]/{id}")]
@@ -91,28 +106,14 @@ namespace Cinema.Controllers
             CancellationToken cancellationToken)
         {
 
-            await repository.UpdateById(id,
+            await _hallRepository.UpdateById(id,
                 hall.CountSeats,
                 hall.Name,
                 hall.IsWorking,
                 cancellationToken);
 
-            return Ok("Информация обновлена");
+            return Ok("The information has been updated");
 
-        }
-
-        [HttpPut("[action]/{name}")]
-        public async Task<IActionResult> UpdateByName([FromBody] HallDto hall, string name,
-            CancellationToken cancellationToken)
-        {
-
-            await repository.UpdateByName(name,
-                hall.CountSeats,
-                hall.Name,
-                hall.IsWorking,
-                cancellationToken);
-
-            return Ok("Информация обновлена");
         }
     }
 }

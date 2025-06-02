@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Cinema.Contracts;
 using Cinema.Models;
 using Cinema.Infrastructure;
+using System.Xml.Linq;
 using Cinema.Interfaces;
 
 namespace Cinema.Repositories
@@ -14,6 +15,16 @@ namespace Cinema.Repositories
         public HallRepository(AppDbContext appDbContext)
         {
             _context = appDbContext;
+        }
+        public async Task DeleteById(int id, CancellationToken
+            cancellationToken)
+        {
+            await _context.Halls
+                .Where(x => x.Id == id)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.IsDeleted, true),
+                    cancellationToken);
+
         }
 
         public async Task<List<HallEntity>> GetAll(CancellationToken cancellationToken)
@@ -46,17 +57,10 @@ namespace Cinema.Repositories
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task DeleteById(int id, CancellationToken cancellationToken)
+        public async Task SuperDeleteById(int id, CancellationToken cancellationToken)
         {
             HallEntity? hall = null;
             hall = await _context.Halls.FindAsync(id, cancellationToken);
-            _context.Halls.Remove(hall);
-            await _context.SaveChangesAsync(cancellationToken);
-        }
-        public async Task DeleteByName(string name, CancellationToken cancellationToken)
-        {
-            HallEntity? hall = null;
-            hall = await _context.Halls.FirstOrDefaultAsync(x => x.Name.Contains(name), cancellationToken);
             _context.Halls.Remove(hall);
             await _context.SaveChangesAsync(cancellationToken);
         }
@@ -72,18 +76,6 @@ namespace Cinema.Repositories
                     .SetProperty(h => h.IsWorking, isWorking),
                     cancellationToken);
 
-        }
-
-        public async Task UpdateByName(string nam, int countSeats, string name,
-            bool isWorking, CancellationToken cancellationToken)
-        {
-            await _context.Halls
-                .Where(x => x.Name.Contains(nam))
-                .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(h => h.CountSeats, countSeats)
-                    .SetProperty(h => h.Name, name)
-                    .SetProperty(h => h.IsWorking, isWorking),
-                    cancellationToken);
         }
     }
 }

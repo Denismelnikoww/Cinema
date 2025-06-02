@@ -10,5 +10,6 @@
         public TimeSpan Time { get; set; }
         public DateTime DateTime { get; set; }
         public decimal Price { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

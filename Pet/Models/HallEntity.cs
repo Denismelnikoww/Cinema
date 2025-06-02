@@ -7,5 +7,6 @@
         public bool IsWorking { get; set; }
         public required int CountSeats { get; set; }
         public ICollection<SessionEntity> Sessions { get; set; } = [];
+        public bool IsDeleted { get; set; }
     }
 }

@@ -6,6 +6,8 @@ namespace Cinema.Interfaces
 {
     public interface IMovieRepository
     {
+        Task DeleteById(int id, CancellationToken cancellationToken);
+        Task SuperDeleteById(int id, CancellationToken cancellationToken);
         Task Add([FromBody] MovieDto movieDto, CancellationToken cancellationToken);
         Task<List<MovieEntity>> GetAll(CancellationToken cancellationToken);
         Task<MovieEntity?> GetById(int id, CancellationToken cancellationToken);
