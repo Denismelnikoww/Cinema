@@ -78,6 +78,8 @@ namespace Cinema.Extentions
         {
             services.Configure<AuthOptions>(configuration.GetSection(nameof(AuthOptions)));
             services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
+            services.Configure<RolePermissionOptions>(
+                configuration.GetSection(nameof(RolePermissionOptions)));
 
             return services;
         }

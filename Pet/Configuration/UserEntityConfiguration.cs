@@ -11,9 +11,10 @@ namespace Cinema.Configuration
             builder.HasKey(u => u.Id);
 
             builder.HasOne(u => u.Role)
-            .WithMany(r => r.Users)
-            .HasForeignKey(u => u.RoleId)
-            .OnDelete(DeleteBehavior.Restrict);
+                .WithMany(r => r.Users)
+                .HasForeignKey(u => u.RoleId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

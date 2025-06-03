@@ -3,6 +3,8 @@ using Cinema.Extentions;
 using Cinema.Infrastructure;
 using Cinema.Options;
 using FluentValidation;
+using Cinema.Interfaces;
+using Cinema.Repositories;
 
 namespace Cinema.Services
 {

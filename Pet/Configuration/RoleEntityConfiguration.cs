@@ -1,4 +1,5 @@
-﻿using Cinema.Models;
+﻿using Cinema.Enums;
+using Cinema.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,7 +12,16 @@ namespace Cinema.Configuration
             builder.HasKey(x => x.Id);
 
             builder.HasMany(r => r.Permissions)
-                .WithMany(p => p.Roles);
+                .WithMany(p => p.Roles)
+                .UsingEntity<Dictionary<string, object>>(
+                   "RolePermissions",
+                   r => r.HasOne<PermissionEntity>().WithMany().HasForeignKey("PermissionId"),
+                   p => p.HasOne<RoleEntity>().WithMany().HasForeignKey("RoleId")
+                   );
+
+            builder.HasData(Role.User,
+                            Role.Moderator,
+                            Role.Admin);
         }
     }
 }

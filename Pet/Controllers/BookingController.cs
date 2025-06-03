@@ -1,11 +1,13 @@
 ﻿using Cinema.Contracts;
 using Cinema.Interfaces;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace Cinema.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class BookingController : ControllerBase
