@@ -1,8 +1,6 @@
-﻿using Cinema.Contracts;
-using Cinema.Infrastructure;
+﻿using Cinema.Infrastucture.Infrastructure;
 using Cinema.Interfaces;
 using Cinema.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.Repositories
@@ -29,8 +27,8 @@ namespace Cinema.Repositories
             var delete = await _context.Bookings
                 .FindAsync(id, cancellationToken);
 
-             _context.Bookings.Remove(delete); 
-            
+            _context.Bookings.Remove(delete);
+
             await _context.SaveChangesAsync(cancellationToken);
         }
 
@@ -60,10 +58,18 @@ namespace Cinema.Repositories
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task Add([FromBody] BookingDto bookingDto,
-            CancellationToken cancellationToken)
+        public async Task Add(int sessionId,
+                              int userId,
+                              int seatNumber,
+                              CancellationToken cancellationToken)
         {
-            var bookingEntity = Mapper.MapToEntity(bookingDto);
+            var bookingEntity = new BookingEntity
+            {
+                SessionId = sessionId,
+                UserId = userId,
+                SeatNumber = seatNumber
+            };
+
 
             await _context.Bookings.AddAsync(bookingEntity, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);

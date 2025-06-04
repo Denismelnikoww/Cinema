@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Cinema.Contracts;
 using Cinema.Models;
-using Cinema.Infrastructure;
 using Cinema.Interfaces;
+using Cinema.Infrastucture.Infrastructure;
 
 namespace Cinema.Repositories
 {
@@ -17,19 +16,19 @@ namespace Cinema.Repositories
             _context = appDbContext;
         }
 
-        public async Task DeleteById(int id,CancellationToken cancellationToken)
+        public async Task DeleteById(int id, CancellationToken cancellationToken)
         {
-           await _context.Bookings
-                .Where(x=>x.Id == id)
-                .ExecuteUpdateAsync(s => s
-                .SetProperty(m => m.IsDeleted,true),
-                cancellationToken);
+            await _context.Bookings
+                 .Where(x => x.Id == id)
+                 .ExecuteUpdateAsync(s => s
+                 .SetProperty(m => m.IsDeleted, true),
+                 cancellationToken);
         }
 
-        public async Task SuperDeleteById(int id,CancellationToken cancellationToken)
+        public async Task SuperDeleteById(int id, CancellationToken cancellationToken)
         {
             var delete = await _context.Bookings
-                .FindAsync(id,cancellationToken);
+                .FindAsync(id, cancellationToken);
 
             _context.Bookings.Remove(delete);
             await _context.SaveChangesAsync(cancellationToken);
@@ -70,9 +69,22 @@ namespace Cinema.Repositories
                                     .ToListAsync(cancellationToken);
         }
 
-        public async Task Add([FromBody] MovieDto movieDto, CancellationToken cancellationToken)
+        public async Task Add(string author,
+                              string description,
+                              float rating,
+                              TimeSpan duration,
+                              string title,
+                              CancellationToken cancellationToken)
         {
-            var movie = Mapper.MapToEntity(movieDto);
+
+            var movie = new MovieEntity
+            {
+                Author = author,
+                Description = description,
+                Rating = rating,
+                Duration = duration,
+                Title = title,
+            };
 
             await _context.AddAsync(movie, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);

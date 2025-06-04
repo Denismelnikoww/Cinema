@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Cinema.Models;
-using Cinema.Infrastructure;
 using Cinema.Interfaces;
+using Cinema.Infrastucture.Infrastructure;
 
 namespace Cinema.Repositories
 {
@@ -45,8 +45,11 @@ namespace Cinema.Repositories
                 .FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
         }
 
-        public async Task Add(string userName, string passwordHash, string email,
-            bool isAdmin, CancellationToken cancellationToken)
+        public async Task Add(string userName,
+                              string passwordHash,
+                              string email,
+                              bool isAdmin,
+                              CancellationToken cancellationToken)
         {
             var alreadyExists = await GetByEmail(email, cancellationToken);
 

@@ -30,7 +30,7 @@ namespace Cinema.Controllers
                 return BadRequest(validateResult.ToDictionary());
             }
 
-            await _hallRepository.Add(hallDto, cancellationToken);
+            //await _hallRepository.Add(hallDto, cancellationToken);
 
             return Ok("The hall was successfully created");
         }

@@ -2,7 +2,7 @@
 using Cinema.Models;
 using System.Reflection;
 
-namespace Cinema.Infrastructure
+namespace Cinema.Infrastucture.Infrastructure
 {
     public class AppDbContext : DbContext
     {

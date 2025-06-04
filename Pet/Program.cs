@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.CookiePolicy;
 using Cinema.Extentions;
-using Cinema.Infrastructure;
 using Cinema.Options;
 using FluentValidation;
 using Cinema.Interfaces;
 using Cinema.Repositories;
+using Cinema.Infrastucture.Infrastructure;
+using Cinema.Validators;
+using Cinema.Application.UseCases.Booking;
 
 namespace Cinema.Services
 {
@@ -21,7 +23,9 @@ namespace Cinema.Services
             services.AddApiAuthentication(builder.Configuration);
             services.AddDbContext<AppDbContext>();
 
-            services.AddValidatorsFromAssemblyContaining<Program>();
+            services.AddScoped<CreateBookingUseCase>();
+            services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+
             services.AddProblemDetails();
             services.AddControllers();
             services.AddEndpointsApiExplorer();
@@ -53,17 +57,6 @@ namespace Cinema.Services
             app.UseAuthorization();
 
             app.MapControllers();
-
-            var jwtOptions = builder.Configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>();
-            var authOptions = builder.Configuration.GetSection(nameof(AuthOptions)).Get<AuthOptions>();
-
-            Console.WriteLine($"JWT Secret: {jwtOptions?.SecretKey}");
-            Console.WriteLine($"Auth Cookie: {authOptions?.CookieName}");
-
-            if (string.IsNullOrEmpty(jwtOptions?.SecretKey))
-                throw new Exception("JWT Secret Key is not configured");
-            if (string.IsNullOrEmpty(authOptions?.CookieName))
-                throw new Exception("Auth Cookie Name is not configured");
 
             app.Run();
         }

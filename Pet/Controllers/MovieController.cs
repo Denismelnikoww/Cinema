@@ -98,7 +98,7 @@ namespace Cinema.Controllers
                 return BadRequest(validateResult.ToDictionary());
             }
 
-            await _movieRepository.Add(movieDto, cancellationToken);
+           // await _movieRepository.Add(movieDto, cancellationToken);
 
             return Ok($"Film {movieDto.Title} successfully created");
 

@@ -1,4 +1,5 @@
-﻿using Cinema.Contracts;
+﻿using Cinema.Application.UseCases.Booking;
+using Cinema.Contracts;
 using Cinema.Interfaces;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +8,6 @@ using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace Cinema.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class BookingController : ControllerBase
@@ -22,42 +22,27 @@ namespace Cinema.Controllers
             _validator = validator;
         }
 
-        [HttpGet("[action]/{id}")]
+        [HttpGet("[action]/{id:int}")]
         public async Task<IActionResult> GetById(int id,
-            CancellationToken cancellationToken)
+                                                 CancellationToken cancellationToken,
+                                                 [FromServices] GetBookingById useCase)
         {
-            var bookingEntity = await _bookingRepository.GetById(id, cancellationToken);
+            var useCaseResult = await useCase.Execute(id, cancellationToken);
 
-            if (bookingEntity == null)
-            {
-                return BadRequest("Booking with this Id does not exist");
-            }
-
-            return Ok(Mapper.MapToDto(bookingEntity));
+            return useCaseResult;
         }
 
-        [HttpGet("[action]/{id}")]
+        [HttpGet("[action]/{id:int}")]
         public async Task<IActionResult> GetBySessionId(int id,
-            CancellationToken cancellationToken)
+                                                        CancellationToken cancellationToken,
+                                                        [FromServices] GetBookingBySessionId useCase)
         {
-            var bookingsEntity = await _bookingRepository.GetBySessionId(id, cancellationToken);
+            var useCaseResult = await useCase.Execute(id, cancellationToken);
 
-            if (bookingsEntity.Count == 0)
-            {
-                return BadRequest("Booking on this session does not exist");
-            }
-
-            List<BookingDto> bookingsDto = [];
-
-            foreach (var bookingEntity in bookingsEntity)
-            {
-                bookingsDto.Add(Mapper.MapToDto(bookingEntity));
-            }
-
-            return Ok(bookingsDto);
+            return useCaseResult;
         }
 
-        [HttpGet("[action]/{id}")]
+        [HttpGet("[action]/{id:int}")]
         public async Task<IActionResult> GetByUserId(int id,
             CancellationToken cancellationToken)
         {
@@ -81,18 +66,12 @@ namespace Cinema.Controllers
 
         [HttpPost("[action]")]
         public async Task<IActionResult> Create([FromBody] BookingDto bookingDto,
-            CancellationToken cancellationToken)
+                                                [FromServices] CreateBookingUseCase useCase,
+                                                CancellationToken cancellationToken)
         {
-            var validateResult = await _validator.ValidateAsync(bookingDto, cancellationToken);
+            var useCaseResult = await useCase.Execute(bookingDto, cancellationToken);
 
-            if (!validateResult.IsValid)
-            {
-                return BadRequest(validateResult.ToDictionary());
-            }
-
-            await _bookingRepository.Add(bookingDto, cancellationToken);
-
-            return Ok();
+            return useCaseResult;
         }
 
         [HttpDelete("[action]/{id}")]

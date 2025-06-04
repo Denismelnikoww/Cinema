@@ -73,7 +73,7 @@ namespace Cinema.Controllers
                 return BadRequest(validateResult.ToDictionary());
             }
 
-            await _sessionRepository.Create(sessionDto, cancellationToken);
+            //await _sessionRepository.Create(sessionDto, cancellationToken);
 
             return Ok("Session was successfully created");
         }

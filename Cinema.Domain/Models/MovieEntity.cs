@@ -7,7 +7,7 @@
         public required string Author { get; set; }
         public float Rating { get; set; }
         public string Description { get; set; }
-        public TimeSpan Time { get; set; }
+        public TimeSpan Duration { get; set; }
         public  ICollection<SessionEntity> Sessions { get; set; } = [];
         public bool IsDeleted { get; set; }
     }

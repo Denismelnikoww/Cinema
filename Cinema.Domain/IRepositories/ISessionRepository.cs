@@ -1,5 +1,4 @@
-﻿using Cinema.Contracts;
-using Cinema.Models;
+﻿using Cinema.Models;
 
 namespace Cinema.Interfaces
 {
@@ -7,9 +6,9 @@ namespace Cinema.Interfaces
     {
         Task DeleteById(int id, CancellationToken cancellationToken);
         Task SuperDeleteById(int id, CancellationToken cancellationToken);
-        Task Create(SessionDto session, CancellationToken cancellationToken);
         Task<List<SessionEntity>> GetAllByHall(int hallId, CancellationToken cancellationToken);
         Task<List<SessionEntity>> GetAllByMovie(int movieId, CancellationToken cancellationToken);
         Task<SessionEntity?> GetById(int id, CancellationToken cancellationToken);
+        Task Add(int movieId, DateTime dateTime, int hallId, int price, TimeSpan duration, CancellationToken cancellationToken);
     }
 }

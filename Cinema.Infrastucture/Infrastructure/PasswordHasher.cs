@@ -1,4 +1,5 @@
-﻿using Cinema.Interfaces;
+﻿using BCrypt.Net;
+using Cinema.Interfaces;
 
 namespace Cinema.Infrastructure
 {

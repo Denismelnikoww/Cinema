@@ -1,12 +1,10 @@
-﻿using Cinema.Contracts;
-using Cinema.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Cinema.Models;
 
 namespace Cinema.Interfaces
 {
     public interface IHallRepository
     {
-        Task Add([FromBody] HallDto hallDto, CancellationToken cancellationToken);
+        Task Add(string name, int countSeats, bool isWorking, CancellationToken cancellationToken);
         Task DeleteById(int id, CancellationToken cancellationToken);
         Task<List<HallEntity>> GetAll(CancellationToken cancellationToken);
         Task<HallEntity?> GetById(int id, CancellationToken cancellationToken);

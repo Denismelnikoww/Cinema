@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Cinema.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
 using Cinema.Models;
-using Cinema.Infrastructure;
-using System.Xml.Linq;
 using Cinema.Interfaces;
+using Cinema.Infrastucture.Infrastructure;
 
 namespace Cinema.Repositories
 {
@@ -48,10 +45,17 @@ namespace Cinema.Repositories
             return await _context.Halls.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
-        public async Task Add([FromBody] HallDto hallDto,
-            CancellationToken cancellationToken)
+        public async Task Add(string name,
+                              int countSeats,
+                              bool isWorking,
+                              CancellationToken cancellationToken)
         {
-            var hall = Mapper.MapToEntity(hallDto);
+            var hall = new HallEntity
+            {
+                Name = name,
+                CountSeats = countSeats,
+                IsWorking = isWorking,
+            };
 
             await _context.Halls.AddAsync(hall, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);

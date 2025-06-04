@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Cinema.Contracts;
 using Cinema.Models;
-using System;
-using Cinema.Infrastructure;
 using Cinema.Interfaces;
+using Cinema.Infrastucture.Infrastructure;
 
 namespace Cinema.Repositories
 {
@@ -56,15 +54,21 @@ namespace Cinema.Repositories
             return await _context.Sessions.FindAsync(id, cancellationToken);
         }
 
-        public async Task Create(SessionDto session, CancellationToken cancellationToken)
+        public async Task Add(int movieId,
+                                 DateTime dateTime,
+                                 int hallId,
+                                 int price,
+                                 TimeSpan duration,
+                                 CancellationToken cancellationToken)
         {
+
             SessionEntity sessionEntity = new SessionEntity
             {
-                MovieId = session.MovieId,
-                DateTime = session.DateTime,
-                HallId = session.HallId,
-                Price = session.Price,
-                Time = session.Time,
+                MovieId = movieId,
+                DateTime = dateTime,
+                HallId = hallId,
+                Price = price,
+                Duration = duration,
             };
 
             await _context.Sessions.AddAsync(sessionEntity, cancellationToken);

@@ -7,7 +7,7 @@
         public virtual HallEntity Hall { get; set; }
         public int MovieId { get; set; }
         public virtual MovieEntity Movie { get; set; }
-        public TimeSpan Time { get; set; }
+        public TimeSpan Duration { get; set; }
         public DateTime DateTime { get; set; }
         public decimal Price { get; set; }
         public bool IsDeleted { get; set; }
