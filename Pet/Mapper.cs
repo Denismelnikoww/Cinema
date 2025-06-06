@@ -58,7 +58,7 @@ namespace Cinema
                 MovieId = sessionEntity.MovieId,
                 DateTime = sessionEntity.DateTime,
                 Price = sessionEntity.Price,
-                Time = sessionEntity.Duration,
+                Duration = sessionEntity.Duration,
             };
         }
 
@@ -66,7 +66,7 @@ namespace Cinema
         {
             return new SessionEntity
             {
-                Duration = sessionDto.Time,
+                Duration = sessionDto.Duration,
                 DateTime = sessionDto.DateTime,
                 Price = sessionDto.Price,
                 HallId = sessionDto.HallId,

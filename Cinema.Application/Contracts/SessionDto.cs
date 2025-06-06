@@ -6,7 +6,7 @@ namespace Cinema.Contracts
     {
         public int HallId { get; set; }
         public int MovieId { get; set; }
-        public TimeSpan Time { get; set; }
+        public TimeSpan Duration { get; set; }
         public DateTime DateTime { get; set; }
         public decimal Price { get; set; }
     }

@@ -6,30 +6,31 @@ namespace Cinema.Infrastucture.Infrastructure
 {
     public class AppDbContext : DbContext
     {
-        private readonly IConfiguration _configuration;
-        public AppDbContext(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
+        //private readonly IConfiguration _configuration;
+        //public AppDbContext(IConfiguration configuration)
+        //{
+        //    _configuration = configuration;
+        //}
+        public AppDbContext(DbContextOptions<AppDbContext> options) 
+            : base(options) { }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder
-                .UseNpgsql(_configuration.GetConnectionString("Database"))
-                .UseLoggerFactory(CreateLoggerFactory())
-                .EnableSensitiveDataLogging();
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder
+        //        .UseNpgsql(_configuration.GetConnectionString("Database"))
+        //        .UseLoggerFactory(CreateLoggerFactory())
+        //        .EnableSensitiveDataLogging();
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(
-                Assembly.GetExecutingAssembly());
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
 
-        public ILoggerFactory CreateLoggerFactory()
-        {
-            return LoggerFactory.Create(builder => { builder.AddConsole(); });
-        }
+        //public ILoggerFactory CreateLoggerFactory()
+        //{
+        //    return LoggerFactory.Create(builder => { builder.AddConsole(); });
+        //}
 
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<MovieEntity> Movies { get; set; }

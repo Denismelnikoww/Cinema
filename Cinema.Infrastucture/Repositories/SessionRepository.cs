@@ -57,7 +57,7 @@ namespace Cinema.Repositories
         public async Task Add(int movieId,
                                  DateTime dateTime,
                                  int hallId,
-                                 int price,
+                                 decimal price,
                                  TimeSpan duration,
                                  CancellationToken cancellationToken)
         {

@@ -1,9 +1,12 @@
 ﻿using Cinema.Contracts;
 using Cinema.Interfaces;
-using FluentResults;
 using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using ResultSharp.Core;
+using ResultSharp.Errors;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Cinema.Application.UseCases.Booking
 {
@@ -19,14 +22,16 @@ namespace Cinema.Application.UseCases.Booking
             _validator = validator; 
         }
 
-        public async Task<IActionResult> Execute(BookingDto bookingDto, 
+        public async Task<Result<string>> ExecuteAsync(BookingDto bookingDto, 
             CancellationToken cancellationToken)
         {
-            var validateResult = await _validator.ValidateAsync(bookingDto, cancellationToken);
-
+            var validateResult = await _validator.ValidateAsync(bookingDto,
+                cancellationToken);
+            
             if (!validateResult.IsValid)
             {
-                return new BadRequestObjectResult(validateResult.ToDictionary());
+                return Error.BadRequest(JsonSerializer
+                    .Serialize(validateResult.ToDictionary()));
             }
 
             await _bookingRepository.Add(bookingDto.SessionId,
@@ -34,7 +39,7 @@ namespace Cinema.Application.UseCases.Booking
                                          bookingDto.SeatNumber,
                                          cancellationToken);
 
-            return new OkObjectResult("Booking successful create");
+            return Result.Success("Booking successful create");
         }
     }
 }

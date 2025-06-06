@@ -2,6 +2,8 @@
 using Cinema.Contracts;
 using FluentValidation;
 using Cinema.Interfaces;
+using Cinema.Application.UseCases.Hall;
+using ResultSharp.HttpResult;
 
 namespace Cinema.Controllers
 {
@@ -9,111 +11,58 @@ namespace Cinema.Controllers
     [Route("[Controller]")]
     public class HallController : ControllerBase
     {
-        private readonly IHallRepository _hallRepository;
-        private readonly IValidator<HallDto> _validator;
-
-        public HallController(IHallRepository hallRepository,
-            IValidator<HallDto> validator)
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetAll(
+            [FromServices] GetAllHallsUseCase useCase,
+            CancellationToken cancellationToken)
         {
-            _hallRepository = hallRepository;
-            _validator = validator;
+            var result = await useCase.ExecuteAsync(cancellationToken);
+            return result.ToResponse();
+        }
+
+        [HttpGet("[action]/{id:int}")]
+        public async Task<IActionResult> GetById(int id,
+            [FromServices] GetHallByIdUseCase useCase,
+            CancellationToken cancellationToken)
+        {
+            var result = await useCase.ExecuteAsync(id, cancellationToken);
+            return result.ToResponse();
         }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> Create([FromBody] HallDto hallDto,
+            [FromServices] CreateHallUseCase useCase,
             CancellationToken cancellationToken)
         {
-            var validateResult = await _validator.ValidateAsync(hallDto, cancellationToken);
-
-            if (!validateResult.IsValid)
-            {
-                return BadRequest(validateResult.ToDictionary());
-            }
-
-            //await _hallRepository.Add(hallDto, cancellationToken);
-
-            return Ok("The hall was successfully created");
+            var result = await useCase.ExecuteAsync(hallDto, cancellationToken);
+            return result.ToResponse();
         }
 
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
-        {
-
-            var halls = await _hallRepository.GetAll(cancellationToken);
-
-            var hallsDto = new List<HallDto>();
-
-            foreach (var hall in halls)
-            {
-                var hallDto = Mapper.MapToDto(hall);
-
-                hallsDto.Add(hallDto);
-            }
-
-            return Ok(hallsDto);
-
-        }
-
-        [HttpGet("[action]/{id}")]
-        public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
-        {
-
-            var hall = await _hallRepository.GetById(id, cancellationToken);
-
-            if (hall == null)
-            {
-                return NotFound("Hall with this id does not exist");
-            }
-
-            var hallDto = Mapper.MapToDto(hall);
-
-            return Ok(hallDto);
-
-        }
-
-        [HttpDelete("[action]/{id}")]
+        [HttpDelete("[action]/{id:int}")]
         public async Task<IActionResult> DeleteById(int id,
+            [FromServices] DeleteHallByIdUseCase useCase,
             CancellationToken cancellationToken)
         {
-            var delete = await GetById(id, cancellationToken);
-
-            if (delete == null)
-            {
-                return BadRequest("Incorrect ID");
-            }
-
-            await _hallRepository.DeleteById(id, cancellationToken);
-            return Ok("The hall has been deleted");
+            var result = await useCase.ExecuteAsync(id, cancellationToken);
+            return result.ToResponse();
         }
 
-            [HttpDelete("[action]/{id}")]
-        public async Task<IActionResult> SuperDeleteById(int id, 
-        CancellationToken cancellationToken)
+        [HttpDelete("[action]/{id:int}")]
+        public async Task<IActionResult> SuperDeleteById(int id,
+            [FromServices] SuperDeleteHallByIdUseCase useCase,
+            CancellationToken cancellationToken)
         {
-            var delete = await GetById(id, cancellationToken);
-
-            if (delete == null)
-            {
-                return BadRequest("Incorrect ID");
-            }
-
-            await _hallRepository.SuperDeleteById(id, cancellationToken);
-            return Ok("The hall has been deleted");
+            var result = await useCase.ExecuteAsync(id, cancellationToken);
+            return result.ToResponse();
         }
 
-        [HttpPut("[action]/{id}")]
+        [HttpPut("[action]/{id:int}")]
         public async Task<IActionResult> UpdateById([FromBody] HallDto hall, int id,
+            [FromServices] UpdateHallByIdUseCase useCase,
             CancellationToken cancellationToken)
         {
-
-            await _hallRepository.UpdateById(id,
-                hall.CountSeats,
-                hall.Name,
-                hall.IsWorking,
-                cancellationToken);
-
-            return Ok("The information has been updated");
-
+            var result = await useCase.ExecuteAsync(id, hall, cancellationToken);
+            return result.ToResponse();
         }
     }
 }

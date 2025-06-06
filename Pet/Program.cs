@@ -1,12 +1,9 @@
 using Microsoft.AspNetCore.CookiePolicy;
 using Cinema.Extentions;
-using Cinema.Options;
-using FluentValidation;
-using Cinema.Interfaces;
-using Cinema.Repositories;
 using Cinema.Infrastucture.Infrastructure;
-using Cinema.Validators;
 using Cinema.Application.UseCases.Booking;
+using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.Services
 {
@@ -23,7 +20,22 @@ namespace Cinema.Services
             services.AddApiAuthentication(builder.Configuration);
             services.AddDbContext<AppDbContext>();
 
-            services.AddScoped<CreateBookingUseCase>();
+            services.Scan(scan => scan
+                .FromAssemblyOf<CreateBookingUseCase>()
+                .AddClasses(classes => classes.Where(c => c.Name.EndsWith("UseCase")))
+                .AsSelf()
+                .WithScopedLifetime());
+
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseNpgsql(
+                    builder.Configuration.GetConnectionString("Database"),
+                    b => b.MigrationsAssembly("Cinema.Infrastucture")
+                    )
+                );
+
+            services.AddHttpContextAccessor();
+
+
             services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddProblemDetails();

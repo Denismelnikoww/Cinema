@@ -1,137 +1,83 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Cinema.Contracts;
-using FluentValidation;
-using Cinema.Interfaces;
-using Cinema.Repositories;
+using Cinema.Application.UseCases.Movie;
 using Microsoft.AspNetCore.Authorization;
+using Cinema.Contracts;
+using ResultSharp.HttpResult;
 
 namespace Cinema.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("[Controller]")]
     public class MovieController : ControllerBase
     {
-        private readonly IMovieRepository _movieRepository;
-        private readonly IValidator<MovieDto> _validator;
-        public MovieController(IMovieRepository movieRepository,
-            IValidator<MovieDto> validator)
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetAll(
+            [FromServices] GetAllMoviesUseCase useCase,
+            CancellationToken cancellationToken)
         {
-            _movieRepository = movieRepository;
-            _validator = validator;
+            var result = await useCase.ExecuteAsync(cancellationToken);
+            return result.ToResponse();
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetByPage(
+            int page,
+            int pageSize,
+            [FromServices] GetMoviesByPageUseCase useCase,
+            CancellationToken cancellationToken)
         {
-            var movies = await _movieRepository.GetAll(cancellationToken);
-
-            var moviesDto = new List<MovieDto>();
-
-            foreach (var movie in movies)
-            {
-                moviesDto.Add(Mapper.MapToDto(movie));
-            }
-
-            return Ok(moviesDto);
-        }
-
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetByPage(int page, int pageSize, CancellationToken cancellationToken)
-        {
-            var movies = await _movieRepository.GetByPage(page, pageSize, cancellationToken);
-
-            var moviesDto = new List<MovieDto>();
-            foreach (var movie in movies)
-            {
-                moviesDto.Add(Mapper.MapToDto(movie));
-            }
-
-            return Ok(moviesDto);
+            var result = await useCase.ExecuteAsync(page, pageSize, cancellationToken);
+            return result.ToResponse();
         }
 
         [HttpGet("[action]/{title}")]
-        public async Task<IActionResult> GetByName(string title, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetByName(
+            string title,
+            [FromServices] GetMoviesByNameUseCase useCase,
+            CancellationToken cancellationToken)
         {
-
-            var movies = await _movieRepository.GetFilterTitle(title, cancellationToken);
-
-            if (movies.Count == 0)
-            {
-                return NotFound("Movies with this title does not exist");
-            }
-
-            var moviesDto = new List<MovieDto>();
-
-            foreach (var movie in movies)
-            {
-                moviesDto.Add(Mapper.MapToDto(movie));
-            }
-
-            return Ok(moviesDto);
+            var result = await useCase.ExecuteAsync(title, cancellationToken);
+            return result.ToResponse();
         }
 
         [HttpGet("[action]/{id}")]
-        public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetById(
+            int id,
+            [FromServices] GetMovieByIdUseCase useCase,
+            CancellationToken cancellationToken)
         {
-
-            var movie = await _movieRepository.GetById(id, cancellationToken);
-
-            if (movie == null)
-            {
-                return NotFound("Movie with this id does not exist");
-            }
-
-            var movieDto = Mapper.MapToDto(movie);
-
-            return Ok(movieDto);
+            var result = await useCase.ExecuteAsync(id, cancellationToken);
+            return result.ToResponse();
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Create([FromBody] MovieDto movieDto,
+        public async Task<IActionResult> Create(
+            [FromBody] MovieDto movieDto,
+            [FromServices] CreateMovieUseCase useCase,
             CancellationToken cancellationToken)
         {
-            var validateResult = await _validator.ValidateAsync(movieDto, cancellationToken);
-
-            if (!validateResult.IsValid)
-            {
-                return BadRequest(validateResult.ToDictionary());
-            }
-
-           // await _movieRepository.Add(movieDto, cancellationToken);
-
-            return Ok($"Film {movieDto.Title} successfully created");
-
+            var result = await useCase.ExecuteAsync(movieDto, cancellationToken);
+            return result.ToResponse();
         }
 
         [HttpDelete("[action]/{id}")]
-        public async Task<IActionResult> DeleteById(int id,
+        public async Task<IActionResult> DeleteById(
+            int id,
+            [FromServices] DeleteMovieByIdUseCase useCase,
             CancellationToken cancellationToken)
         {
-            var delete = await GetById(id, cancellationToken);
-
-            if (delete == null)
-            {
-                return BadRequest("Incorrect ID");
-            }
-
-            await _movieRepository.DeleteById(id, cancellationToken);
-            return Ok("The movie has been deleted");
+            var result = await useCase.ExecuteAsync(id, cancellationToken);
+            return result.ToResponse();
         }
 
         [HttpDelete("[action]/{id}")]
-        public async Task<IActionResult> SuperDeleteById(int id,
-    CancellationToken cancellationToken)
+        public async Task<IActionResult> SuperDeleteById(
+            int id,
+            [FromServices] SuperDeleteMovieByIdUseCase useCase,
+            CancellationToken cancellationToken)
         {
-            var delete = await GetById(id, cancellationToken);
-
-            if (delete == null)
-            {
-                return BadRequest("Incorrect ID");
-            }
-
-            await _movieRepository.SuperDeleteById(id, cancellationToken);
-            return Ok("The movie has been deleted");
+            var result = await useCase.ExecuteAsync(id, cancellationToken);
+            return result.ToResponse();
         }
     }
 }

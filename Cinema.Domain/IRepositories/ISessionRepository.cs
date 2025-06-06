@@ -9,6 +9,6 @@ namespace Cinema.Interfaces
         Task<List<SessionEntity>> GetAllByHall(int hallId, CancellationToken cancellationToken);
         Task<List<SessionEntity>> GetAllByMovie(int movieId, CancellationToken cancellationToken);
         Task<SessionEntity?> GetById(int id, CancellationToken cancellationToken);
-        Task Add(int movieId, DateTime dateTime, int hallId, int price, TimeSpan duration, CancellationToken cancellationToken);
+        Task Add(int movieId, DateTime dateTime, int hallId, decimal price, TimeSpan duration, CancellationToken cancellationToken);
     }
 }

@@ -10,7 +10,7 @@
 
 	<ItemGroup>
 		
-		<PackageReference Include="FluentResults" Version="3.16.0" />
+		<PackageReference Include="4q-dev.ResultSharp" Version="1.0.20" />
 		<PackageReference Include="FluentValidation" Version="12.0.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
 	</ItemGroup>

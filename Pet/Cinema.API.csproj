@@ -11,9 +11,8 @@
 
 
 	<ItemGroup>
+		<PackageReference Include="4q-dev.ResultSharp.HttpResult" Version="1.0.1" />
 		<PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
-		<PackageReference Include="FluentResults" Version="3.16.0" />
-		<PackageReference Include="FluentValidation" Version="12.0.0" />
 		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.5" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.5" />
@@ -22,6 +21,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="Scrutor" Version="6.1.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.11.0" />
 	</ItemGroup>
