@@ -17,7 +17,7 @@ namespace Cinema.Application.UseCases.Movie
         public async Task<Result<List<MovieDto>>> ExecuteAsync(string title, 
             CancellationToken cancellationToken)
         {
-            var movies = await _movieRepository.GetFilterTitle(title, cancellationToken);
+            var movies = await _movieRepository.GetFilterTitleAsync(title, cancellationToken);
 
             if (movies.Count == 0)
             {

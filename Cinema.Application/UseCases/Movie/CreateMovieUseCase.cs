@@ -28,7 +28,7 @@ namespace Cinema.Application.UseCases.Movie
                 return Error.BadRequest(JsonSerializer.Serialize(validateResult.ToDictionary()));
             }
 
-            await _movieRepository.Add(
+            await _movieRepository.AddAsync(
                 movieDto.Author,
                 movieDto.Description,
                 movieDto.Rating,

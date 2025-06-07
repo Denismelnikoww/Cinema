@@ -13,7 +13,7 @@ namespace Cinema.Repositories
         {
             _context = appDbContext;
         }
-        public async Task DeleteById(int id, CancellationToken
+        public async Task DeleteAsync(int id, CancellationToken
             cancellationToken)
         {
             await _context.Halls
@@ -24,13 +24,13 @@ namespace Cinema.Repositories
 
         }
 
-        public async Task<List<HallEntity>> GetAll(CancellationToken cancellationToken)
+        public async Task<List<HallEntity>> GetAllAsync(CancellationToken cancellationToken)
         {
             return await _context.Halls
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
         }
-        public async Task<List<HallEntity>> GetWorking(CancellationToken cancellationToken,
+        public async Task<List<HallEntity>> GetWorkingAsync(CancellationToken cancellationToken,
                                                        bool isWorking = true)
         {
             var query = _context.Halls.AsNoTracking();
@@ -40,12 +40,12 @@ namespace Cinema.Repositories
             return await query.ToListAsync(cancellationToken);
         }
 
-        public async Task<HallEntity?> GetById(int id, CancellationToken cancellationToken)
+        public async Task<HallEntity?> FindAsync(int id, CancellationToken cancellationToken)
         {
             return await _context.Halls.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
-        public async Task Add(string name,
+        public async Task AddAsync(string name,
                               int countSeats,
                               bool isWorking,
                               CancellationToken cancellationToken)
@@ -61,7 +61,7 @@ namespace Cinema.Repositories
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task SuperDeleteById(int id, CancellationToken cancellationToken)
+        public async Task SuperDeleteAsync(int id, CancellationToken cancellationToken)
         {
             HallEntity? hall = null;
             hall = await _context.Halls.FindAsync(id, cancellationToken);
@@ -69,7 +69,7 @@ namespace Cinema.Repositories
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task UpdateById(int id, int countSeats, string name,
+        public async Task UpdateAsync(int id, int countSeats, string name,
             bool isWorking, CancellationToken cancellationToken)
         {
             await _context.Halls

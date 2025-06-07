@@ -32,7 +32,7 @@ namespace Cinema.Application.UseCases.User
                     validateResult.ToDictionary()));
             }
 
-            var existingUser = await _userRepository.GetByEmail(request.Email, cancellationToken);
+            var existingUser = await _userRepository.GetByEmailAsync(request.Email, cancellationToken);
             
             if (existingUser != null)
             {

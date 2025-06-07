@@ -26,7 +26,7 @@ namespace Cinema.Application.UseCases.Hall
                 return Error.BadRequest("Incorrect ID");
             }
 
-            await _hallRepository.DeleteById(id, cancellationToken);
+            await _hallRepository.DeleteAsync(id, cancellationToken);
             return Result.Success("The hall has been deleted");
         }
     }

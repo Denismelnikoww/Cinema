@@ -16,7 +16,7 @@ namespace Cinema.Repositories
             _context = appDbContext;
         }
 
-        public async Task DeleteById(int id, CancellationToken cancellationToken)
+        public async Task DeleteAsync(int id, CancellationToken cancellationToken)
         {
             await _context.Bookings
                  .Where(x => x.Id == id)
@@ -25,7 +25,7 @@ namespace Cinema.Repositories
                  cancellationToken);
         }
 
-        public async Task SuperDeleteById(int id, CancellationToken cancellationToken)
+        public async Task SuperDeleteAsync(int id, CancellationToken cancellationToken)
         {
             var delete = await _context.Bookings
                 .FindAsync(id, cancellationToken);
@@ -34,20 +34,20 @@ namespace Cinema.Repositories
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<List<MovieEntity>> GetAll(CancellationToken cancellationToken)
+        public async Task<List<MovieEntity>> GetAllAsync(CancellationToken cancellationToken)
         {
             return await _context.Movies
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
         }
-        public async Task<MovieEntity?> GetById(int id, CancellationToken cancellationToken)
+        public async Task<MovieEntity?> FindAsync(int id, CancellationToken cancellationToken)
         {
             return await _context.Movies
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
-        public async Task<List<MovieEntity>> GetFilterTitle(string title, CancellationToken cancellationToken)
+        public async Task<List<MovieEntity>> GetFilterTitleAsync(string title, CancellationToken cancellationToken)
         {
             var query = _context.Movies.AsNoTracking();
 
@@ -59,7 +59,7 @@ namespace Cinema.Repositories
             return await query.ToListAsync(cancellationToken);
         }
 
-        public async Task<List<MovieEntity>> GetByPage(int page, int pageSize,
+        public async Task<List<MovieEntity>> GetByPageAsync(int page, int pageSize,
             CancellationToken cancellationToken)
         {
             return await _context.Movies
@@ -69,7 +69,7 @@ namespace Cinema.Repositories
                                     .ToListAsync(cancellationToken);
         }
 
-        public async Task Add(string author,
+        public async Task AddAsync(string author,
                               string description,
                               float rating,
                               TimeSpan duration,

@@ -11,7 +11,7 @@ namespace Cinema.Controllers
     public class SessionController : ControllerBase
     {
         [HttpGet("[action]/{id}")]
-        public async Task<IActionResult> GetById(
+        public async Task<IActionResult> Get(
             int id,
             [FromServices] GetSessionByIdUseCase useCase,
             CancellationToken cancellationToken)
@@ -41,7 +41,7 @@ namespace Cinema.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> CreateSession(
+        public async Task<IActionResult> Create(
             [FromBody] SessionDto sessionDto,
             [FromServices] CreateSessionUseCase useCase,
             CancellationToken cancellationToken)
@@ -51,7 +51,7 @@ namespace Cinema.Controllers
         }
 
         [HttpDelete("[action]/{id}")]
-        public async Task<IActionResult> DeleteById(
+        public async Task<IActionResult> Delete(
             int id,
             [FromServices] DeleteSessionByIdUseCase useCase,
             CancellationToken cancellationToken)
@@ -61,7 +61,7 @@ namespace Cinema.Controllers
         }
 
         [HttpDelete("[action]/{id}")]
-        public async Task<IActionResult> SuperDeleteById(
+        public async Task<IActionResult> SuperDelete(
             int id,
             [FromServices] SuperDeleteSessionByIdUseCase useCase,
             CancellationToken cancellationToken)

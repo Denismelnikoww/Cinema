@@ -20,7 +20,7 @@ namespace Cinema.Application.UseCases.Booking
         public async Task<Result<List<BookingDto>>> ExecuteAsync(int sessionId,
                 CancellationToken cancellationToken)
         {
-            var bookingsEntity = await _bookingRepository.GetBySessionId(sessionId, cancellationToken);
+            var bookingsEntity = await _bookingRepository.FindBySessionAsync(sessionId, cancellationToken);
 
             if (bookingsEntity.Count == 0)
             {

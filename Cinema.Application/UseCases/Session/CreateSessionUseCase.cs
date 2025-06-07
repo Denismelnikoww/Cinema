@@ -28,7 +28,7 @@ namespace Cinema.Application.UseCases.Session
                 return Error.BadRequest(JsonSerializer.Serialize(validateResult.ToDictionary()));
             }
 
-            await _sessionRepository.Add(sessionDto.MovieId,
+            await _sessionRepository.AddAsync(sessionDto.MovieId,
                                          sessionDto.DateTime,
                                          sessionDto.HallId,
                                          sessionDto.Price,

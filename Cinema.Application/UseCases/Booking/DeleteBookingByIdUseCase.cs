@@ -28,7 +28,7 @@ namespace Cinema.API.Controllers
                 return Error.BadRequest("Incorrect ID");
             }
 
-            await _bookingRepository.DeleteById(id, cancellationToken);
+            await _bookingRepository.DeleteAsync(id, cancellationToken);
 
             return Result.Success("The booking has been deleted");
         }

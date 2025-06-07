@@ -34,7 +34,7 @@ namespace Cinema.Application.UseCases.Booking
                     .Serialize(validateResult.ToDictionary()));
             }
 
-            await _bookingRepository.Add(bookingDto.SessionId,
+            await _bookingRepository.AddAsync(bookingDto.SessionId,
                                          bookingDto.UserId,
                                          bookingDto.SeatNumber,
                                          cancellationToken);

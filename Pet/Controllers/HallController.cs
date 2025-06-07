@@ -21,7 +21,7 @@ namespace Cinema.Controllers
         }
 
         [HttpGet("[action]/{id:int}")]
-        public async Task<IActionResult> GetById(int id,
+        public async Task<IActionResult> Get(int id,
             [FromServices] GetHallByIdUseCase useCase,
             CancellationToken cancellationToken)
         {
@@ -39,7 +39,7 @@ namespace Cinema.Controllers
         }
 
         [HttpDelete("[action]/{id:int}")]
-        public async Task<IActionResult> DeleteById(int id,
+        public async Task<IActionResult> Delete(int id,
             [FromServices] DeleteHallByIdUseCase useCase,
             CancellationToken cancellationToken)
         {
@@ -48,7 +48,7 @@ namespace Cinema.Controllers
         }
 
         [HttpDelete("[action]/{id:int}")]
-        public async Task<IActionResult> SuperDeleteById(int id,
+        public async Task<IActionResult> SuperDelete(int id,
             [FromServices] SuperDeleteHallByIdUseCase useCase,
             CancellationToken cancellationToken)
         {
@@ -57,7 +57,7 @@ namespace Cinema.Controllers
         }
 
         [HttpPut("[action]/{id:int}")]
-        public async Task<IActionResult> UpdateById([FromBody] HallDto hall, int id,
+        public async Task<IActionResult> Update([FromBody] HallDto hall, int id,
             [FromServices] UpdateHallByIdUseCase useCase,
             CancellationToken cancellationToken)
         {

@@ -15,13 +15,13 @@ namespace Cinema.Repositories
             _context = appDbContext;
         }
 
-        public async Task<UserEntity?> GetById(int id, CancellationToken cancellationToken)
+        public async Task<UserEntity?> FindAsync(int id, CancellationToken cancellationToken)
         {
             return await _context.Users
                 .FindAsync(id, cancellationToken);
         }
 
-        public async Task DeleteById(int id, CancellationToken cancellationToken)
+        public async Task DeleteAsync(int id, CancellationToken cancellationToken)
         {
             await _context.Users
                  .Where(x => x.Id == id)
@@ -30,7 +30,7 @@ namespace Cinema.Repositories
                  cancellationToken);
         }
 
-        public async Task SuperDeleteById(int id, CancellationToken cancellationToken)
+        public async Task SuperDeleteAsync(int id, CancellationToken cancellationToken)
         {
             var delete = await _context.Users
                 .FindAsync(id, cancellationToken);
@@ -39,19 +39,19 @@ namespace Cinema.Repositories
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<UserEntity?> GetByEmail(string email, CancellationToken cancellationToken)
+        public async Task<UserEntity?> GetByEmailAsync(string email, CancellationToken cancellationToken)
         {
             return await _context.Users
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
         }
 
-        public async Task Add(string userName,
+        public async Task AddAsync(string userName,
                               string passwordHash,
                               string email,
                               CancellationToken cancellationToken)
         {
-            var alreadyExists = await GetByEmail(email, cancellationToken);
+            var alreadyExists = await GetByEmailAsync(email, cancellationToken);
 
             if (alreadyExists != null)
             {
@@ -72,7 +72,7 @@ namespace Cinema.Repositories
 
         public async Task<int> GetRoleId(int userId, CancellationToken cancellationToken)
         {
-            var user = await GetById(userId, cancellationToken);
+            var user = await FindAsync(userId, cancellationToken);
 
             return user != null ? user.RoleId : 0;
         }

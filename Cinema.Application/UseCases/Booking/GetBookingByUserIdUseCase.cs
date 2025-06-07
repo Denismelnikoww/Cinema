@@ -18,7 +18,7 @@ namespace Cinema.Application.UseCases.Booking
         public async Task<Result<List<BookingDto>>> ExecuteAsync(int userId,
                 CancellationToken cancellationToken)
         {
-            var bookingsEntity = await _bookingRepository.GetByUserId(userId, cancellationToken);
+            var bookingsEntity = await _bookingRepository.FindByUserAsync(userId, cancellationToken);
 
             if (bookingsEntity.Count == 0)
             {

@@ -28,7 +28,7 @@ namespace Cinema.Application.UseCases.Booking
                 return Error.BadRequest("Incorrect ID");
             }
 
-            await _bookingRepository.SuperDeleteById(id, cancellationToken);
+            await _bookingRepository.SuperDeleteAsync(id, cancellationToken);
 
             return Result.Success("The booking has been deleted");
         }

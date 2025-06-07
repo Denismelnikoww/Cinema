@@ -17,7 +17,7 @@ namespace Cinema.Application.UseCases.Hall
         public async Task<Result<HallDto>> ExecuteAsync(int id,
             CancellationToken cancellationToken)
         {
-            var hall = await _hallRepository.GetById(id, cancellationToken);
+            var hall = await _hallRepository.FindAsync(id, cancellationToken);
 
             if (hall == null)
             {

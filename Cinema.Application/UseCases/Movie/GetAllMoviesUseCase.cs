@@ -15,7 +15,7 @@ namespace Cinema.Application.UseCases.Movie
 
         public async Task<Result<List<MovieDto>>> ExecuteAsync(CancellationToken cancellationToken)
         {
-            var movies = await _movieRepository.GetAll(cancellationToken);
+            var movies = await _movieRepository.GetAllAsync(cancellationToken);
 
             var moviesDto = movies.Select(Mapper.MapToDto).ToList();
 

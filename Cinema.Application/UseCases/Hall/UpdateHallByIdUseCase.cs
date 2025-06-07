@@ -16,7 +16,7 @@ namespace Cinema.Application.UseCases.Hall
         public async Task<Result<string>> ExecuteAsync(int id, HallDto hall,
             CancellationToken cancellationToken)
         {
-            await _hallRepository.UpdateById(
+            await _hallRepository.UpdateAsync(
                 id,
                 hall.CountSeats,
                 hall.Name,

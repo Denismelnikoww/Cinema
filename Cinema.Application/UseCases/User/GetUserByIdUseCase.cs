@@ -16,7 +16,7 @@ namespace Cinema.Application.UseCases.User
 
         public async Task<Result<UserDto>> ExecuteAsync(int id, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetById(id, cancellationToken);
+            var user = await _userRepository.FindAsync(id, cancellationToken);
 
             if (user == null)
             {

@@ -16,7 +16,7 @@ namespace Cinema.Controllers
     {
         [RequirementsPermission(Permission.SuperRead)]
         [HttpGet("[action]/{id:int}")]
-        public async Task<IActionResult> GetById(int id,
+        public async Task<IActionResult> Get(int id,
             [FromServices] GetBookingByIdUseCase useCase,
             CancellationToken cancellationToken)
         {
@@ -26,7 +26,7 @@ namespace Cinema.Controllers
         }
 
         [HttpGet("[action]/{sessionId:int}")]
-        public async Task<IActionResult> GetBySessionId(int sessionId,
+        public async Task<IActionResult> GetBySession(int sessionId,
             [FromServices] GetBookingBySessionIdUseCase useCase,
             CancellationToken cancellationToken)
         {
@@ -36,7 +36,7 @@ namespace Cinema.Controllers
         }
 
         [HttpGet("[action]/{userId:int}")]
-        public async Task<IActionResult> GetByUserId(int userId,
+        public async Task<IActionResult> GetByUser(int userId,
             [FromServices] GetBookingByUserIdUseCase useCase,
             CancellationToken cancellationToken)
         {
@@ -57,7 +57,7 @@ namespace Cinema.Controllers
         }
 
         [HttpDelete("[action]/{id:int}")]
-        public async Task<IActionResult> DeleteById(int id,
+        public async Task<IActionResult> Delete(int id,
             [FromServices] DeleteBookingByIdUseCase useCase,
             CancellationToken cancellationToken)
         {
@@ -67,7 +67,7 @@ namespace Cinema.Controllers
         }
 
         [HttpDelete("[action]/{id:int}")]
-        public async Task<IActionResult> SuperDeleteById(int id,
+        public async Task<IActionResult> SuperDelete(int id,
             [FromServices]SuperDeleteBookingById useCase,
             CancellationToken cancellationToken)
         {

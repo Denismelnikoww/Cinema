@@ -19,7 +19,7 @@ namespace Cinema.Application.UseCases.Booking
         public async Task<Result<BookingDto>> ExecuteAsync(int id,
             CancellationToken cancellationToken)
         {
-            var bookingEntity = await _bookingRepository.GetById(id, cancellationToken);
+            var bookingEntity = await _bookingRepository.FindAdync(id, cancellationToken);
 
             if (bookingEntity == null)
             {

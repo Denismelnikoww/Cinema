@@ -16,7 +16,7 @@ namespace Cinema.Application.UseCases.Movie
         public async Task<Result<List<MovieDto>>> ExecuteAsync(int page, int pageSize, 
             CancellationToken cancellationToken)
         {
-            var movies = await _movieRepository.GetByPage(page, pageSize, cancellationToken);
+            var movies = await _movieRepository.GetByPageAsync(page, pageSize, cancellationToken);
 
             var moviesDto = movies.Select(Mapper.MapToDto).ToList();
 

@@ -30,7 +30,7 @@ namespace Cinema.Application.UseCases.Hall
                 return Error.BadRequest(JsonSerializer.Serialize(validateResult.ToDictionary()));
             }
 
-            await _hallRepository.Add(hallDto.Name,
+            await _hallRepository.AddAsync(hallDto.Name,
                                       hallDto.CountSeats,
                                       hallDto.IsWorking,
                                       cancellationToken);

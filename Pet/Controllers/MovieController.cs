@@ -31,7 +31,7 @@ namespace Cinema.Controllers
         }
 
         [HttpGet("[action]/{title}")]
-        public async Task<IActionResult> GetByName(
+        public async Task<IActionResult> GetByTitle(
             string title,
             [FromServices] GetMoviesByNameUseCase useCase,
             CancellationToken cancellationToken)
@@ -41,7 +41,7 @@ namespace Cinema.Controllers
         }
 
         [HttpGet("[action]/{id}")]
-        public async Task<IActionResult> GetById(
+        public async Task<IActionResult> Get(
             int id,
             [FromServices] GetMovieByIdUseCase useCase,
             CancellationToken cancellationToken)
@@ -61,7 +61,7 @@ namespace Cinema.Controllers
         }
 
         [HttpDelete("[action]/{id}")]
-        public async Task<IActionResult> DeleteById(
+        public async Task<IActionResult> Delete(
             int id,
             [FromServices] DeleteMovieByIdUseCase useCase,
             CancellationToken cancellationToken)
@@ -71,7 +71,7 @@ namespace Cinema.Controllers
         }
 
         [HttpDelete("[action]/{id}")]
-        public async Task<IActionResult> SuperDeleteById(
+        public async Task<IActionResult> SuperDelete(
             int id,
             [FromServices] SuperDeleteMovieByIdUseCase useCase,
             CancellationToken cancellationToken)

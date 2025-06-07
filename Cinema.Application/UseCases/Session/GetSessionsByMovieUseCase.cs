@@ -17,7 +17,7 @@ namespace Cinema.Application.UseCases.Session
         public async Task<Result<List<SessionDto>>> ExecuteAsync(int movieId, 
             CancellationToken cancellationToken)
         {
-            var sessions = await _sessionRepository.GetAllByMovie(movieId, cancellationToken);
+            var sessions = await _sessionRepository.GetAllByMovieAsync(movieId, cancellationToken);
 
             if (sessions.Count == 0)
             {

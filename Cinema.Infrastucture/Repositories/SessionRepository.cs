@@ -14,7 +14,7 @@ namespace Cinema.Repositories
             _context = context;
         }
 
-        public async Task DeleteById(int id, CancellationToken cancellationToken)
+        public async Task DeleteAsync(int id, CancellationToken cancellationToken)
         {
             await _context.Sessions
                  .Where(x => x.Id == id)
@@ -23,7 +23,7 @@ namespace Cinema.Repositories
                  cancellationToken);
         }
 
-        public async Task SuperDeleteById(int id, CancellationToken cancellationToken)
+        public async Task SuperDeleteAsync(int id, CancellationToken cancellationToken)
         {
             var delete = await _context.Sessions
                 .FindAsync(id, cancellationToken);
@@ -32,7 +32,7 @@ namespace Cinema.Repositories
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<List<SessionEntity>> GetAllByHall(int hallId,
+        public async Task<List<SessionEntity>> GetAllByHallAsync(int hallId,
             CancellationToken cancellationToken)
         {
             return await _context.Sessions
@@ -40,7 +40,7 @@ namespace Cinema.Repositories
                  .ToListAsync(cancellationToken);
         }
 
-        public async Task<List<SessionEntity>> GetAllByMovie(int movieId,
+        public async Task<List<SessionEntity>> GetAllByMovieAsync(int movieId,
             CancellationToken cancellationToken)
         {
             return await _context.Sessions
@@ -48,13 +48,13 @@ namespace Cinema.Repositories
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<SessionEntity?> GetById(int id,
+        public async Task<SessionEntity?> FindAsync(int id,
             CancellationToken cancellationToken)
         {
             return await _context.Sessions.FindAsync(id, cancellationToken);
         }
 
-        public async Task Add(int movieId,
+        public async Task AddAsync(int movieId,
                                  DateTime dateTime,
                                  int hallId,
                                  decimal price,

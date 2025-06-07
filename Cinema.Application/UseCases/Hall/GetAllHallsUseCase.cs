@@ -16,7 +16,7 @@ namespace Cinema.Application.UseCases.Hall
 
         public async Task<Result<List<HallDto>>> ExecuteAsync(CancellationToken cancellationToken)
         {
-            var halls = await _hallRepository.GetAll(cancellationToken);
+            var halls = await _hallRepository.GetAllAsync(cancellationToken);
 
             var hallsDto = halls.Select(Mapper.MapToDto).ToList();
 

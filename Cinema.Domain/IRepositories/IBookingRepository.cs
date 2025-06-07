@@ -4,11 +4,11 @@ namespace Cinema.Interfaces
 {
     public interface IBookingRepository
     {
-        Task Add(int sessionId, int userId, int seatNumber, CancellationToken cancellationToken);
-        Task DeleteById(int id, CancellationToken cancellationToken);
-        Task<BookingEntity?> GetById(int id, CancellationToken cancellationToken);
-        Task<List<BookingEntity>> GetBySessionId(int id, CancellationToken cancellationToken);
-        Task<List<BookingEntity>> GetByUserId(int id, CancellationToken cancellationToken);
-        Task SuperDeleteById(int id, CancellationToken cancellationToken);
+        Task AddAsync(int sessionId, int userId, int seatNumber, CancellationToken cancellationToken);
+        Task DeleteAsync(int id, CancellationToken cancellationToken);
+        Task<BookingEntity?> FindAdync(int id, CancellationToken cancellationToken);
+        Task<List<BookingEntity>> FindBySessionAsync(int id, CancellationToken cancellationToken);
+        Task<List<BookingEntity>> FindByUserAsync(int id, CancellationToken cancellationToken);
+        Task SuperDeleteAsync(int id, CancellationToken cancellationToken);
     }
 }

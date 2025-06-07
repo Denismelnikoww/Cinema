@@ -27,7 +27,7 @@ namespace Cinema.Application.UseCases.Movie
                 return Error.BadRequest("Incorrect ID");
             }
 
-            await _movieRepository.SuperDeleteById(id, cancellationToken);
+            await _movieRepository.SuperDeleteAsync(id, cancellationToken);
             return Result.Success("The movie has been deleted");
         }
     }

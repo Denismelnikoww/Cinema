@@ -26,7 +26,7 @@ namespace Cinema.Infrastucture.Auth
 
             int.TryParse(userIdClaim, out var userId);
 
-            var user = await _userRepository.GetById(userId, cancellationToken);
+            var user = await _userRepository.FindAsync(userId, cancellationToken);
 
             if (user == null)
             {
@@ -34,7 +34,7 @@ namespace Cinema.Infrastucture.Auth
                 return;
             }
 
-            var permissionsId = await _roleRepository.GetPermission(user.RoleId,
+            var permissionsId = await _roleRepository.GetPermissionAsync(user.RoleId,
                 cancellationToken);
 
             if (requirement.Permissions.All(p =>

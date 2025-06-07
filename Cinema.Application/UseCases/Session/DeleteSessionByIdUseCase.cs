@@ -27,7 +27,7 @@ namespace Cinema.Application.UseCases.Session
                 return Error.BadRequest("Incorrect ID");
             }
 
-            await _sessionRepository.DeleteById(id, cancellationToken);
+            await _sessionRepository.DeleteAsync(id, cancellationToken);
 
             return Result.Success("The session has been deleted");
         }

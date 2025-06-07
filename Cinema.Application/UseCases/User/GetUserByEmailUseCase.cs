@@ -16,7 +16,7 @@ namespace Cinema.Application.UseCases.User
 
         public async Task<Result<UserDto>> ExecuteAsync(string email, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetByEmail(email, cancellationToken);
+            var user = await _userRepository.GetByEmailAsync(email, cancellationToken);
 
             if (user == null)
             {

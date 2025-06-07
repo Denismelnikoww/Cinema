@@ -15,14 +15,14 @@ namespace Cinema.Application.UseCases.User
 
         public async Task<Result<string>> ExecuteAsync(int id, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetById(id, cancellationToken);
+            var user = await _userRepository.FindAsync(id, cancellationToken);
 
             if (user == null)
             {
                 return Error.BadRequest("Incorrect ID");
             }
 
-            await _userRepository.DeleteById(id, cancellationToken);
+            await _userRepository.DeleteAsync(id, cancellationToken);
 
             return Result.Success("The user has been deleted");
         }

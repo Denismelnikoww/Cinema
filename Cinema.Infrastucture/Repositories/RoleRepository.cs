@@ -12,7 +12,7 @@ namespace Cinema.Infrastucture.Repositories
             _context = context;
         }
 
-        public async Task<List<int>> GetPermission(int roleId,
+        public async Task<List<int>> GetPermissionAsync(int roleId,
             CancellationToken cancellationToken)
         {
             return await _context.Roles

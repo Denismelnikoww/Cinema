@@ -33,7 +33,7 @@ namespace Cinema.Controllers
         }
 
         [HttpGet("GetById/{id}")]
-        public async Task<IActionResult> GetById(
+        public async Task<IActionResult> Get(
             int id,
             [FromServices] GetUserByIdUseCase useCase,
             CancellationToken cancellationToken)
@@ -55,7 +55,7 @@ namespace Cinema.Controllers
         }
 
         [HttpDelete("DeleteById/{id}")]
-        public async Task<IActionResult> DeleteById(
+        public async Task<IActionResult> Delete(
             int id,
             [FromServices] DeleteUserByIdUseCase useCase,
             CancellationToken cancellationToken)
@@ -66,7 +66,7 @@ namespace Cinema.Controllers
         }
 
         [HttpDelete("SuperDeleteById/{id}")]
-        public async Task<IActionResult> SuperDeleteById(
+        public async Task<IActionResult> SuperDelete(
             int id,
             [FromServices] SuperDeleteUserByIdUseCase useCase,
             CancellationToken cancellationToken)

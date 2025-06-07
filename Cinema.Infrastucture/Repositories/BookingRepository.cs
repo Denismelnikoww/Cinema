@@ -13,7 +13,7 @@ namespace Cinema.Repositories
             _context = context;
         }
 
-        public async Task DeleteById(int id, CancellationToken cancellationToken)
+        public async Task DeleteAsync(int id, CancellationToken cancellationToken)
         {
             await _context.Bookings
                 .Where(x => x.Id == id)
@@ -22,7 +22,7 @@ namespace Cinema.Repositories
                 cancellationToken);
         }
 
-        public async Task SuperDeleteById(int id, CancellationToken cancellationToken)
+        public async Task SuperDeleteAsync(int id, CancellationToken cancellationToken)
         {
             var delete = await _context.Bookings
                 .FindAsync(id, cancellationToken);
@@ -32,7 +32,7 @@ namespace Cinema.Repositories
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<BookingEntity?> GetById(int id,
+        public async Task<BookingEntity?> FindAdync(int id,
             CancellationToken cancellationToken)
         {
             return await _context.Bookings
@@ -40,7 +40,7 @@ namespace Cinema.Repositories
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
-        public async Task<List<BookingEntity>> GetBySessionId(int id,
+        public async Task<List<BookingEntity>> FindBySessionAsync(int id,
             CancellationToken cancellationToken)
         {
             return await _context.Bookings
@@ -49,7 +49,7 @@ namespace Cinema.Repositories
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<List<BookingEntity>> GetByUserId(int id,
+        public async Task<List<BookingEntity>> FindByUserAsync(int id,
             CancellationToken cancellationToken)
         {
             return await _context.Bookings
@@ -58,7 +58,7 @@ namespace Cinema.Repositories
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task Add(int sessionId,
+        public async Task AddAsync(int sessionId,
                               int userId,
                               int seatNumber,
                               CancellationToken cancellationToken)
