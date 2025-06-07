@@ -22,7 +22,7 @@ namespace Cinema.Interfaces
         {
             var hashedPassword = _passwordHasher.Generate(password);
 
-            await _userRepository.Add(userName, hashedPassword, email, false, cancellationToken);
+            await _userRepository.Add(userName, hashedPassword, email,  cancellationToken);
         }
 
         public async Task<string> Login(string email, string password,

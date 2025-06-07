@@ -2,6 +2,7 @@
 using Cinema.Models;
 using Cinema.Interfaces;
 using Cinema.Infrastucture.Infrastructure;
+using Cinema.Enums;
 
 namespace Cinema.Repositories
 {
@@ -48,7 +49,6 @@ namespace Cinema.Repositories
         public async Task Add(string userName,
                               string passwordHash,
                               string email,
-                              bool isAdmin,
                               CancellationToken cancellationToken)
         {
             var alreadyExists = await GetByEmail(email, cancellationToken);
@@ -62,11 +62,19 @@ namespace Cinema.Repositories
             {
                 Email = email,
                 Name = userName,
-                PasswordHash = passwordHash
+                PasswordHash = passwordHash,
+                RoleId = (int)Role.User,
             };
 
             await _context.Users.AddAsync(User, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task<int> GetRoleId(int userId, CancellationToken cancellationToken)
+        {
+            var user = await GetById(userId, cancellationToken);
+
+            return user != null ? user.RoleId : 0;
         }
     }
 }

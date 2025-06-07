@@ -7,7 +7,7 @@ using Cinema.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace Cinema.Infrastructure
+namespace Cinema.Infrastucture.Auth
 {
     public class JwtProvider : IJwtProvider
     {

@@ -14,7 +14,6 @@ namespace Cinema.Configuration
                 .WithMany(r => r.Users)
                 .HasForeignKey(u => u.RoleId)
                 .OnDelete(DeleteBehavior.Restrict);
-
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using BCrypt.Net;
 using Cinema.Interfaces;
 
-namespace Cinema.Infrastructure
+namespace Cinema.Infrastucture.Auth
 {
     public class PasswordHasher : IPasswordHasher
     {

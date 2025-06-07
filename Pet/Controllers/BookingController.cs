@@ -1,15 +1,20 @@
-﻿using Cinema.API.Controllers;
+﻿using Cinema.API.Attribute;
+using Cinema.API.Controllers;
 using Cinema.Application.UseCases.Booking;
 using Cinema.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ResultSharp.HttpResult;
+using Cinema.Enums;
 
 namespace Cinema.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class BookingController : ControllerBase
     {
+        [RequirementsPermission(Permission.SuperRead)]
         [HttpGet("[action]/{id:int}")]
         public async Task<IActionResult> GetById(int id,
             [FromServices] GetBookingByIdUseCase useCase,

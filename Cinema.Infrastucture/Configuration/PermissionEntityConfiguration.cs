@@ -11,12 +11,13 @@ namespace Cinema.Configuration
         {
             builder.HasKey(p => p.Id);
 
-            builder.HasData(Permission.Create,
-                            Permission.Delete,
-                            Permission.Read,
-                            Permission.SuperCreate,
-                            Permission.SuperRead,
-                            Permission.SuperDelete);
+            builder.HasData(Enum.GetValues<Permission>()
+                .Select(permission => new PermissionEntity
+                {
+                    Id = (int)permission,
+                    Name = permission.ToString()
+                })
+            );
         }
     }
 }

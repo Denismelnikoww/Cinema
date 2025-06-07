@@ -37,5 +37,6 @@ namespace Cinema.Infrastucture.Infrastructure
         public DbSet<BookingEntity> Bookings { get; set; }
         public DbSet<HallEntity> Halls { get; set; }
         public DbSet<SessionEntity> Sessions { get; set; }
+        public DbSet<RoleEntity> Roles { get; set; }
     }
 }

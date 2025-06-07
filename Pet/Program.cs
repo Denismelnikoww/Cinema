@@ -4,6 +4,8 @@ using Cinema.Infrastucture.Infrastructure;
 using Cinema.Application.UseCases.Booking;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Cinema.Infrastucture.Auth;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cinema.Services
 {
@@ -18,7 +20,6 @@ namespace Cinema.Services
             services.AddServices();
             services.AddAuth();
             services.AddApiAuthentication(builder.Configuration);
-            services.AddDbContext<AppDbContext>();
 
             services.Scan(scan => scan
                 .FromAssemblyOf<CreateBookingUseCase>()
@@ -35,8 +36,13 @@ namespace Cinema.Services
 
             services.AddHttpContextAccessor();
 
-
             services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+            
+            services.AddAuthentication();
+            services.AddAuthorization();
+
+            services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+            services.AddScoped<IAuthorizationHandler, PermissionHandler>();
 
             services.AddProblemDetails();
             services.AddControllers();
@@ -48,7 +54,6 @@ namespace Cinema.Services
             services.AddConfiguration(builder.Configuration);
 
             var app = builder.Build();
-
 
             app.UseMyExceptionMiddleware();
 
@@ -69,6 +74,17 @@ namespace Cinema.Services
             app.UseAuthorization();
 
             app.MapControllers();
+
+            // “естова€ проверка (можно добавить временно)
+            var provider = builder.Services.BuildServiceProvider();
+            using var scope = provider.CreateScope();
+            var authHandler = scope.ServiceProvider.GetService<IAuthorizationHandler>();
+            var policyProvider = scope.ServiceProvider.GetService<IAuthorizationPolicyProvider>();
+
+            if (authHandler == null || policyProvider == null)
+            {
+                throw new Exception("Authorization services not registered properly");
+            }
 
             app.Run();
         }

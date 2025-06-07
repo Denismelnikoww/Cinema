@@ -6,7 +6,8 @@ using System.Text;
 using Cinema.Interfaces;
 using Cinema.Repositories;
 using Cinema.Services;
-using Cinema.Infrastructure;
+using Cinema.Infrastucture.Auth;
+using Cinema.Infrastucture.Repositories;
 
 namespace Cinema.Extentions
 {
@@ -57,6 +58,7 @@ namespace Cinema.Extentions
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ISessionRepository, SessionRepository>();
             services.AddScoped<IBookingRepository, BookingRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
             return services;
         }
 

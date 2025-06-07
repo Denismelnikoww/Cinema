@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using ResultSharp.Core;
 using ResultSharp.Errors;
+using ResultSharp.Errors.Enums;
 using System.Text.Json;
 
 namespace Cinema.Application.UseCases.User
