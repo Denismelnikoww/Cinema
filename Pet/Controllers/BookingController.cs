@@ -14,8 +14,7 @@ namespace Cinema.Controllers
     [Authorize]
     public class BookingController : ControllerBase
     {
-        [RequirementsPermission(Permission.SuperRead)]
-        [HttpGet("[action]/{id:int}")]
+        [HttpGet("[action]/{id}")]
         public async Task<IActionResult> Get(int id,
             [FromServices] GetBookingByIdUseCase useCase,
             CancellationToken cancellationToken)
@@ -25,7 +24,7 @@ namespace Cinema.Controllers
             return result.ToResponse();
         }
 
-        [HttpGet("[action]/{sessionId:int}")]
+        [HttpGet("[action]/{sessionId}")]
         public async Task<IActionResult> GetBySession(int sessionId,
             [FromServices] GetBookingBySessionIdUseCase useCase,
             CancellationToken cancellationToken)
@@ -35,7 +34,7 @@ namespace Cinema.Controllers
             return result.ToResponse();
         }
 
-        [HttpGet("[action]/{userId:int}")]
+        [HttpGet("[action]/{userId}")]
         public async Task<IActionResult> GetByUser(int userId,
             [FromServices] GetBookingByUserIdUseCase useCase,
             CancellationToken cancellationToken)
@@ -44,7 +43,6 @@ namespace Cinema.Controllers
 
             return result.ToResponse();
         }
-
 
         [HttpPost("[action]")]
         public async Task<IActionResult> Create([FromBody] BookingDto bookingDto,
@@ -56,7 +54,8 @@ namespace Cinema.Controllers
             return result.ToResponse();
         }
 
-        [HttpDelete("[action]/{id:int}")]
+        [RequirementsPermission(Permission.Delete)]
+        [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> Delete(int id,
             [FromServices] DeleteBookingByIdUseCase useCase,
             CancellationToken cancellationToken)
@@ -66,7 +65,8 @@ namespace Cinema.Controllers
             return result.ToResponse();
         }
 
-        [HttpDelete("[action]/{id:int}")]
+        [RequirementsPermission(Permission.SuperDelete)]
+        [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> SuperDelete(int id,
             [FromServices]SuperDeleteBookingById useCase,
             CancellationToken cancellationToken)

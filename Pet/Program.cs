@@ -6,6 +6,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Cinema.Infrastucture.Auth;
 using Microsoft.AspNetCore.Authorization;
+using Cinema.Options;
 
 namespace Cinema.Services
 {
@@ -19,6 +20,7 @@ namespace Cinema.Services
             services.AddRepositories();
             services.AddServices();
             services.AddAuth();
+            services.AddConfiguration(builder.Configuration);
             services.AddApiAuthentication(builder.Configuration);
 
             services.Scan(scan => scan
@@ -51,8 +53,6 @@ namespace Cinema.Services
 
             builder.Configuration.AddUserSecrets<Program>();
 
-            services.AddConfiguration(builder.Configuration);
-
             var app = builder.Build();
 
             app.UseMyExceptionMiddleware();
@@ -74,17 +74,6 @@ namespace Cinema.Services
             app.UseAuthorization();
 
             app.MapControllers();
-
-            // “естова€ проверка (можно добавить временно)
-            var provider = builder.Services.BuildServiceProvider();
-            using var scope = provider.CreateScope();
-            var authHandler = scope.ServiceProvider.GetService<IAuthorizationHandler>();
-            var policyProvider = scope.ServiceProvider.GetService<IAuthorizationPolicyProvider>();
-
-            if (authHandler == null || policyProvider == null)
-            {
-                throw new Exception("Authorization services not registered properly");
-            }
 
             app.Run();
         }

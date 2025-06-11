@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Cinema.Options;
 using System.Text;
 using Cinema.Interfaces;
 using Cinema.Repositories;
-using Cinema.Services;
 using Cinema.Infrastucture.Auth;
 using Cinema.Infrastucture.Repositories;
 
@@ -23,8 +21,8 @@ namespace Cinema.Extentions
                     var jwtOptions = configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>();
                     var authOptions = configuration.GetSection(nameof(AuthOptions)).Get<AuthOptions>();
 
-                    if (string.IsNullOrEmpty(jwtOptions?.SecretKey))
-                        throw new ArgumentNullException(nameof(jwtOptions.SecretKey));
+                    if (string.IsNullOrEmpty(jwtOptions?.AcсessSecretKey))
+                        throw new ArgumentNullException(nameof(jwtOptions.AcсessSecretKey));
 
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -33,7 +31,7 @@ namespace Cinema.Extentions
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(jwtOptions.SecretKey)),
+                            Encoding.UTF8.GetBytes(jwtOptions.AcсessSecretKey)),
                         ClockSkew = TimeSpan.Zero
                     };
 
@@ -42,7 +40,7 @@ namespace Cinema.Extentions
                         OnMessageReceived = context =>
                         {
                             context.Token = context.Request
-                                .Cookies[authOptions?.CookieName ?? "AuthToken"];
+                                .Cookies[authOptions?.AcсessTokenName ?? "AuthToken"];
                             return Task.CompletedTask;
                         }
                     };
@@ -59,12 +57,14 @@ namespace Cinema.Extentions
             services.AddScoped<ISessionRepository, SessionRepository>();
             services.AddScoped<IBookingRepository, BookingRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             return services;
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddHttpContextAccessor(); 
             return services;
         }
 

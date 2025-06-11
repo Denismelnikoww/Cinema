@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Cinema.Models;
 using System.Reflection;
+using Cinema.Domain.Models;
 
 namespace Cinema.Infrastucture.Infrastructure
 {
@@ -38,5 +39,6 @@ namespace Cinema.Infrastucture.Infrastructure
         public DbSet<HallEntity> Halls { get; set; }
         public DbSet<SessionEntity> Sessions { get; set; }
         public DbSet<RoleEntity> Roles { get; set; }
+        public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
     }
 }

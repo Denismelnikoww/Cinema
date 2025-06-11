@@ -36,7 +36,7 @@ namespace Cinema.Repositories
             CancellationToken cancellationToken)
         {
             return await _context.Sessions
-                 .Where(session => session.HallId == hallId)
+                 .Where(x => x.HallId == hallId && !x.IsDeleted)
                  .ToListAsync(cancellationToken);
         }
 
@@ -44,14 +44,16 @@ namespace Cinema.Repositories
             CancellationToken cancellationToken)
         {
             return await _context.Sessions
-                .Where(session => session.MovieId == movieId)
+                .Where(x => x.MovieId == movieId && !x.IsDeleted)
                 .ToListAsync(cancellationToken);
         }
 
         public async Task<SessionEntity?> FindAsync(int id,
             CancellationToken cancellationToken)
         {
-            return await _context.Sessions.FindAsync(id, cancellationToken);
+            return await _context.Sessions
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, cancellationToken);
         }
 
         public async Task AddAsync(int movieId,

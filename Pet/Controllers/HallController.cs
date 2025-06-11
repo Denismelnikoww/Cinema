@@ -4,6 +4,8 @@ using FluentValidation;
 using Cinema.Interfaces;
 using Cinema.Application.UseCases.Hall;
 using ResultSharp.HttpResult;
+using Cinema.API.Attribute;
+using Cinema.Enums;
 
 namespace Cinema.Controllers
 {
@@ -20,7 +22,7 @@ namespace Cinema.Controllers
             return result.ToResponse();
         }
 
-        [HttpGet("[action]/{id:int}")]
+        [HttpGet("[action]/{id}")]
         public async Task<IActionResult> Get(int id,
             [FromServices] GetHallByIdUseCase useCase,
             CancellationToken cancellationToken)
@@ -29,6 +31,7 @@ namespace Cinema.Controllers
             return result.ToResponse();
         }
 
+        [RequirementsPermission(Permission.Create)]
         [HttpPost("[action]")]
         public async Task<IActionResult> Create([FromBody] HallDto hallDto,
             [FromServices] CreateHallUseCase useCase,
@@ -38,7 +41,8 @@ namespace Cinema.Controllers
             return result.ToResponse();
         }
 
-        [HttpDelete("[action]/{id:int}")]
+        [RequirementsPermission(Permission.Delete)]
+        [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> Delete(int id,
             [FromServices] DeleteHallByIdUseCase useCase,
             CancellationToken cancellationToken)
@@ -47,7 +51,8 @@ namespace Cinema.Controllers
             return result.ToResponse();
         }
 
-        [HttpDelete("[action]/{id:int}")]
+        [RequirementsPermission(Permission.SuperDelete)]
+        [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> SuperDelete(int id,
             [FromServices] SuperDeleteHallByIdUseCase useCase,
             CancellationToken cancellationToken)
@@ -56,7 +61,8 @@ namespace Cinema.Controllers
             return result.ToResponse();
         }
 
-        [HttpPut("[action]/{id:int}")]
+        [RequirementsPermission(Permission.Create)]
+        [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Update([FromBody] HallDto hall, int id,
             [FromServices] UpdateHallByIdUseCase useCase,
             CancellationToken cancellationToken)

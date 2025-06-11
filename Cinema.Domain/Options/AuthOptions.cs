@@ -2,6 +2,7 @@
 {
     public class AuthOptions
     {
-        public string CookieName { get; set; } = "Lol!!";
+        public string AcсessTokenName { get; set; } = ""; 
+        public string RefreshTokenName { get; set; } = ""; 
     }
 }

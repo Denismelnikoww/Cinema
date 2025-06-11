@@ -37,7 +37,7 @@ namespace Cinema.Repositories
         {
             return await _context.Bookings
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+                .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, cancellationToken);
         }
 
         public async Task<List<BookingEntity>> FindBySessionAsync(int id,
@@ -45,7 +45,7 @@ namespace Cinema.Repositories
         {
             return await _context.Bookings
                 .AsNoTracking()
-                .Where(x => x.SessionId == id)
+                .Where(x => x.SessionId == id && !x.IsDeleted)
                 .ToListAsync(cancellationToken);
         }
 
@@ -54,7 +54,7 @@ namespace Cinema.Repositories
         {
             return await _context.Bookings
                 .AsNoTracking()
-                .Where(x => x.UserId == id)
+                .Where(x => x.UserId == id && !x.IsDeleted)
                 .ToListAsync(cancellationToken);
         }
 

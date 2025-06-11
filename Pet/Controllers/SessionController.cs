@@ -3,6 +3,8 @@ using Cinema.Application.UseCases.Session;
 using ResultSharp.Core;
 using Cinema.Contracts;
 using ResultSharp.HttpResult;
+using Cinema.API.Attribute;
+using Cinema.Enums;
 
 namespace Cinema.Controllers
 {
@@ -40,6 +42,7 @@ namespace Cinema.Controllers
             return result.ToResponse();
         }
 
+        [RequirementsPermission(Permission.Create)]
         [HttpPost("[action]")]
         public async Task<IActionResult> Create(
             [FromBody] SessionDto sessionDto,
@@ -50,6 +53,7 @@ namespace Cinema.Controllers
             return result.ToResponse();
         }
 
+        [RequirementsPermission(Permission.Delete)]
         [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> Delete(
             int id,
@@ -60,6 +64,7 @@ namespace Cinema.Controllers
             return result.ToResponse();
         }
 
+        [RequirementsPermission(Permission.SuperDelete)]
         [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> SuperDelete(
             int id,

@@ -38,35 +38,33 @@ namespace Cinema.Repositories
         {
             return await _context.Movies
                 .AsNoTracking()
+                .Where(x => !x.IsDeleted)
                 .ToListAsync(cancellationToken);
         }
         public async Task<MovieEntity?> FindAsync(int id, CancellationToken cancellationToken)
         {
             return await _context.Movies
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+                .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, cancellationToken);
         }
 
         public async Task<List<MovieEntity>> GetFilterTitleAsync(string title, CancellationToken cancellationToken)
         {
-            var query = _context.Movies.AsNoTracking();
-
-            if (!string.IsNullOrWhiteSpace(title))
-            {
-                query = query.Where(x => x.Title.ToLower().Contains(title));
-            }
-
-            return await query.ToListAsync(cancellationToken);
+            return await _context.Movies
+                .AsNoTracking()
+                .Where(x => x.Title.ToLower().Contains(title) && !x.IsDeleted)
+                .ToListAsync(cancellationToken);
         }
 
         public async Task<List<MovieEntity>> GetByPageAsync(int page, int pageSize,
             CancellationToken cancellationToken)
         {
             return await _context.Movies
-                                    .AsNoTracking()
-                                    .Skip((page - 1) * pageSize)
-                                    .Take(pageSize)
-                                    .ToListAsync(cancellationToken);
+                .AsNoTracking()
+                .Where(x => !x.IsDeleted)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync(cancellationToken);
         }
 
         public async Task AddAsync(string author,

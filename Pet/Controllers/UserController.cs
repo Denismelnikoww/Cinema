@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics.Contracts;
 using Cinema.Contracts;
 using ResultSharp.HttpResult;
+using Cinema.API.Attribute;
+using Cinema.Enums;
+using System.Threading;
 
 namespace Cinema.Controllers
 {
@@ -10,7 +13,7 @@ namespace Cinema.Controllers
     [Route("[Controller]")]
     public class UserController : ControllerBase
     {
-        [HttpPost("Login")]
+        [HttpPost("[action]")]
         public async Task<IActionResult> Login(
             [FromBody] LoginRequest request,
             [FromServices] LoginUseCase useCase,
@@ -21,7 +24,7 @@ namespace Cinema.Controllers
             return result.ToResponse();
         }
 
-        [HttpPost("Register")]
+        [HttpPost("[action]")]
         public async Task<IActionResult> Register(
             [FromBody] RegisterRequest request,
             [FromServices] RegisterUseCase useCase,
@@ -32,7 +35,18 @@ namespace Cinema.Controllers
             return result.ToResponse();
         }
 
-        [HttpGet("GetById/{id}")]
+        [HttpGet("[action]")]
+        public async Task<IActionResult> Refresh(
+            [FromServices] RefreshUseCase useCase,
+            CancellationToken cancellationToken)
+        {
+            var result = await useCase.ExecuteAsync(cancellationToken);
+
+            return result.ToResponse();
+        }
+
+        [RequirementsPermission(Permission.SuperRead)]
+        [HttpGet("[action]/{id}")]
         public async Task<IActionResult> Get(
             int id,
             [FromServices] GetUserByIdUseCase useCase,
@@ -43,7 +57,8 @@ namespace Cinema.Controllers
             return result.ToResponse();
         }
 
-        [HttpGet("GetByEmail/{email}")]
+        [RequirementsPermission(Permission.SuperRead)]
+        [HttpGet("[action]/{email}")]
         public async Task<IActionResult> GetByEmail(
             string email,
             [FromServices] GetUserByEmailUseCase useCase,
@@ -54,7 +69,8 @@ namespace Cinema.Controllers
             return result.ToResponse();
         }
 
-        [HttpDelete("DeleteById/{id}")]
+        [RequirementsPermission(Permission.Delete)]
+        [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> Delete(
             int id,
             [FromServices] DeleteUserByIdUseCase useCase,
@@ -65,7 +81,8 @@ namespace Cinema.Controllers
             return result.ToResponse();
         }
 
-        [HttpDelete("SuperDeleteById/{id}")]
+        [RequirementsPermission(Permission.SuperDelete)]
+        [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> SuperDelete(
             int id,
             [FromServices] SuperDeleteUserByIdUseCase useCase,

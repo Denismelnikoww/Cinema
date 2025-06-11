@@ -3,6 +3,8 @@ using Cinema.Application.UseCases.Movie;
 using Microsoft.AspNetCore.Authorization;
 using Cinema.Contracts;
 using ResultSharp.HttpResult;
+using Cinema.API.Attribute;
+using Cinema.Enums;
 
 namespace Cinema.Controllers
 {
@@ -50,6 +52,7 @@ namespace Cinema.Controllers
             return result.ToResponse();
         }
 
+        [RequirementsPermission(Permission.Create)]
         [HttpPost("[action]")]
         public async Task<IActionResult> Create(
             [FromBody] MovieDto movieDto,
@@ -60,6 +63,7 @@ namespace Cinema.Controllers
             return result.ToResponse();
         }
 
+        [RequirementsPermission(Permission.Delete)]
         [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> Delete(
             int id,
@@ -70,6 +74,7 @@ namespace Cinema.Controllers
             return result.ToResponse();
         }
 
+        [RequirementsPermission(Permission.SuperDelete)]
         [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> SuperDelete(
             int id,

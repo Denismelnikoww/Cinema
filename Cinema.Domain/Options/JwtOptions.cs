@@ -2,7 +2,9 @@
 {
     public class JwtOptions
     {
-        public string SecretKey { get; set; }
-        public int ExpiresHours { get; set; }
+        public string AcсessSecretKey { get; set; }
+        public string RefreshSecretKey { get; set; }
+        public int AccessExpiresHours { get; set; }
+        public int RefreshExpiresDays { get; set; }
     }
 }

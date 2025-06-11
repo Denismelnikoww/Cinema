@@ -9,16 +9,16 @@ namespace Cinema.Application.UseCases.User
 {
     public class RegisterUseCase
     {
-        private readonly IUserService _userService;
+        private readonly IAuthService _authService;
         private readonly IUserRepository _userRepository;
         private readonly IValidator<RegisterRequest> _validator;
 
         public RegisterUseCase(
-            IUserService userService,
+            IAuthService userService,
             IUserRepository userRepository,
             IValidator<RegisterRequest> validator)
         {
-            _userService = userService;
+            _authService = userService;
             _userRepository = userRepository;
             _validator = validator;
         }
@@ -26,20 +26,21 @@ namespace Cinema.Application.UseCases.User
         public async Task<Result<string>> ExecuteAsync(RegisterRequest request, CancellationToken cancellationToken)
         {
             var validateResult = await _validator.ValidateAsync(request, cancellationToken);
+            
             if (!validateResult.IsValid)
             {
                 return Error.BadRequest(JsonSerializer.Serialize(
                     validateResult.ToDictionary()));
             }
 
-            var existingUser = await _userRepository.GetByEmailAsync(request.Email, cancellationToken);
+            var alreadyExist = await _userRepository.GetByEmailAsync(request.Email, cancellationToken);
             
-            if (existingUser != null)
+            if (alreadyExist != null)
             {
                 return Error.BadRequest("An account has already been registered for this email");
             }
 
-            await _userService.Register(
+            await _authService.Register(
                 request.UserName,
                 request.Password,
                 request.Email,

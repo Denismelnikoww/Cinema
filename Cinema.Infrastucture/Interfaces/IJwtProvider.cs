@@ -4,6 +4,9 @@ namespace Cinema.Interfaces
 {
     public interface IJwtProvider
     {
-        string GenerateToken(UserEntity userEntity);
+        string GenerateAccessToken(int userId);
+        string GenerateRefreshToken(int userId);
+        string GetJtiFromToken(string token);
+        int GetUserIdFromToken(string token);
     }
 }

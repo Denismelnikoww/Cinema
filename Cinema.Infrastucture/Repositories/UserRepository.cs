@@ -18,7 +18,7 @@ namespace Cinema.Repositories
         public async Task<UserEntity?> FindAsync(int id, CancellationToken cancellationToken)
         {
             return await _context.Users
-                .FindAsync(id, cancellationToken);
+                .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, cancellationToken);
         }
 
         public async Task DeleteAsync(int id, CancellationToken cancellationToken)
@@ -43,7 +43,7 @@ namespace Cinema.Repositories
         {
             return await _context.Users
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
+                .FirstOrDefaultAsync(x => x.Email == email && !x.IsDeleted, cancellationToken);
         }
 
         public async Task AddAsync(string userName,
@@ -51,13 +51,6 @@ namespace Cinema.Repositories
                               string email,
                               CancellationToken cancellationToken)
         {
-            var alreadyExists = await GetByEmailAsync(email, cancellationToken);
-
-            if (alreadyExists != null)
-            {
-                throw new BadHttpRequestException("This user is already registered");
-            }
-
             var User = new UserEntity
             {
                 Email = email,

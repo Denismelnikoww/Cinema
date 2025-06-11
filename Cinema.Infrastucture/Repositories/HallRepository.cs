@@ -28,21 +28,23 @@ namespace Cinema.Repositories
         {
             return await _context.Halls
                 .AsNoTracking()
+                .Where(x => !x.IsDeleted)
                 .ToListAsync(cancellationToken);
         }
         public async Task<List<HallEntity>> GetWorkingAsync(CancellationToken cancellationToken,
                                                        bool isWorking = true)
         {
-            var query = _context.Halls.AsNoTracking();
 
-            query.Where(x => x.IsWorking == isWorking);
-
-            return await query.ToListAsync(cancellationToken);
+            return await _context.Halls
+                .AsNoTracking()
+                .Where(x => x.IsWorking == isWorking && !x.IsDeleted)
+                .ToListAsync(cancellationToken);
         }
 
         public async Task<HallEntity?> FindAsync(int id, CancellationToken cancellationToken)
         {
-            return await _context.Halls.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            return await _context.Halls
+                .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, cancellationToken);
         }
 
         public async Task AddAsync(string name,
