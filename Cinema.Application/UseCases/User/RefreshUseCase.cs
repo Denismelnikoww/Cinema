@@ -44,9 +44,7 @@ namespace Cinema.Application.UseCases.User
                 return Error.Unauthorized("Invalid refresh token. Please re-authenticate.");
             }
 
-            var isExpire = refreshTokenEntity.ExpiryAt < DateTime.UtcNow;
-
-            if (isExpire)
+            if (refreshTokenEntity.ExpiryAt < DateTime.UtcNow)
             {
                 return Error.Unauthorized("Refresh token has expired. Please re-authenticate.");
             }

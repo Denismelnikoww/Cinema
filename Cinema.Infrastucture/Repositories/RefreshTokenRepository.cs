@@ -20,7 +20,7 @@ namespace Cinema.Infrastucture.Repositories
         {
             return await _context.RefreshTokens
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => !x.IsUsed && x.Jti.ToLower() == jti.ToLower(),
+                .FirstOrDefaultAsync(x => !x.IsUsed && x.Jti == jti,
                 cancellationToken);
         }
 
