@@ -6,7 +6,8 @@ RESTful API для управления кинотеатром: просмотр
 ## 🛠 Технологии
 - **.NET 8.0**
 - **PostgreSQL** 
-- **Entity Framework Core** 
+- **Entity Framework Core**
+- **Redis** - кэширование запрашиваемых фильмов 
 - **Аутентификация**: JWT + Cookies (`Microsoft.AspNetCore.Authentication.JwtBearer`)
 - **Валидация**: `FluentValidation` 
 - **Хеширование паролей**: `BCrypt.Net-Next`
