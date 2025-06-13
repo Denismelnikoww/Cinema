@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  redis:
+    image: redis:latest
+    container_name: redis_container
+    environment:
+      REDIS_PASSWORD: mysecretpass
+      REDIS_USER: myuser
+      REDIS_USER_PASSWORD: myuserpass
+    ports:
+      - "6380:6379"
+    volumes:
+      - ./redisdata:/data
+      - ./redis-init:/usr/local/etc/redis
+    command: >
+      redis-server /usr/local/etc/redis/redis.conf --aclfile /usr/local/etc/redis/users.acl
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "mysecretpass", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped

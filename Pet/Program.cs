@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Cinema.Infrastucture.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Cinema.Options;
+using StackExchange.Redis;
 
 namespace Cinema.Services
 {
@@ -29,17 +30,24 @@ namespace Cinema.Services
                 .AsSelf()
                 .WithScopedLifetime());
 
-            builder.Services.AddDbContext<AppDbContext>(options =>
+            services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(
                     builder.Configuration.GetConnectionString("Database"),
                     b => b.MigrationsAssembly("Cinema.Infrastucture")
                     )
                 );
 
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = builder.Configuration
+                .GetConnectionString("Redis");
+                options.InstanceName = "SampleInstance";
+            });
+
             services.AddHttpContextAccessor();
 
             services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
-            
+
             services.AddAuthentication();
             services.AddAuthorization();
 
