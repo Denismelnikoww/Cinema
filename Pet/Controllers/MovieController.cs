@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Cinema.Application.UseCases.Movie;
-using Microsoft.AspNetCore.Authorization;
 using Cinema.Contracts;
 using ResultSharp.HttpResult;
 using Cinema.API.Attribute;

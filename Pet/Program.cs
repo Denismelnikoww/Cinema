@@ -6,8 +6,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Cinema.Infrastucture.Auth;
 using Microsoft.AspNetCore.Authorization;
-using Cinema.Options;
-using StackExchange.Redis;
+using Serilog;
 
 namespace Cinema.Services
 {
@@ -17,6 +16,12 @@ namespace Cinema.Services
         {
             var builder = WebApplication.CreateBuilder(args);
             var services = builder.Services;
+
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(builder.Configuration)
+                .CreateLogger();
+
+            builder.Host.UseSerilog();
 
             services.AddRepositories();
             services.AddServices();
@@ -84,6 +89,7 @@ namespace Cinema.Services
             app.MapControllers();
 
             app.Run();
+
         }
     }
 }
