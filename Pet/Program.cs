@@ -23,6 +23,16 @@ namespace Cinema.Services
 
             builder.Host.UseSerilog();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", policy =>
+                policy.WithOrigins(
+                    builder.Configuration.GetSection("CorsOrigins").Get<string[]>())
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            });
+
             services.AddRepositories();
             services.AddServices();
             services.AddAuth();
@@ -56,9 +66,6 @@ namespace Cinema.Services
             services.AddAuthentication();
             services.AddAuthorization();
 
-            services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
-            services.AddScoped<IAuthorizationHandler, PermissionHandler>();
-
             services.AddProblemDetails();
             services.AddControllers();
             services.AddEndpointsApiExplorer();
@@ -81,6 +88,8 @@ namespace Cinema.Services
                 HttpOnly = HttpOnlyPolicy.Always,
                 Secure = CookieSecurePolicy.Always
             });
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthentication();
 

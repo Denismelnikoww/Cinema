@@ -6,6 +6,7 @@ using Cinema.Interfaces;
 using Cinema.Repositories;
 using Cinema.Infrastucture.Auth;
 using Cinema.Infrastucture.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cinema.Extentions
 {
@@ -72,6 +73,8 @@ namespace Cinema.Extentions
         {
             services.AddScoped<IJwtProvider, JwtProvider>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
+            services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+            services.AddScoped<IAuthorizationHandler, PermissionHandler>();
             return services;
         }
 
